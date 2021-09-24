@@ -75,16 +75,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             // where it was saved.
             final image = await _controller.takePicture();
 
-            // If the picture was taken, display it on a new screen.
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
-                  // Pass the automatically generated path to
-                  // the DisplayPictureScreen widget.
-                  imagePath: image.path,
-                ),
-              ),
-            );
+            // If the picture was taken, display it.
+            Navigator.pop(context, image.path);
+            // await Navigator.pushReplacementNamed(context, '/home', arguments: {
+            //   'imagePath':image.path
+            // });
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
