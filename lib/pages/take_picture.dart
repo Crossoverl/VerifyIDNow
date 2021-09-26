@@ -26,7 +26,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     // To display the current output from the Camera,
     // create a CameraController.
     _controller = CameraController(
-      // Get a specific camera from the list of available cameras.
       widget.camera,
       // Define the resolution to use.
       ResolutionPreset.medium,
