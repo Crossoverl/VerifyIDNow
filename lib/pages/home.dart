@@ -1,11 +1,10 @@
+import 'dart:convert';
 import 'dart:io' as io;
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/take_picture.dart';
-import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 
 class Home extends StatefulWidget {
   @override
@@ -13,7 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   Map data = {};
   String selfiePath = '';
   String idPath = '';
@@ -24,73 +22,74 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    FlatButton.icon(
-                        onPressed: () async {
-                          openCamera(1);
-                        },
-                        icon: Icon(Icons.camera_alt),
-                        label: Text('Take photo ID')),
-                    SizedBox(width: 24.0,),
-                    FlatButton.icon(
-                        onPressed: () async {
-                          final result = openCamera(0);
-                        },
-                        icon: Icon(Icons.camera_alt),
-                        label: Text('Take Selfie')),
-                  ],
-                ),
-                SizedBox(height: 4.0),
-                Row(
-                  children: [
-                    _displayImage(idPath),
-                    SizedBox(width: 12.0),
-                    _displayImage(selfiePath),
-                  ],
-                ),
-                SizedBox(height: 40.0),
-                FlatButton(
+                FlatButton.icon(
                     onPressed: () async {
-                      // selfie encoding
-                      io.File selfieFile = new io.File(selfiePath.toString());
-                      List<int> selfieBytes = selfieFile.readAsBytesSync();
-                      String selfieBase64 = base64Encode(selfieBytes);
-
-                      // drivers license encoding
-                      io.File dlFile = new io.File(idPath.toString());
-                      List<int> dlBytes = dlFile.readAsBytesSync();
-                      String dlBase64 = base64Encode(dlBytes);
-
-                      // TODO: address is only for emulator
-                      final url = Uri.parse('http://10.0.2.2:5000/');
-                      final response = await http.post(url, body: json.encode({'selfie': selfieBase64, 'dl': dlBase64}));
-                      if (response.statusCode != 200) {
-                        setState(() {
-                          verified = 'error';
-                        });
-                      }
-                      else {
-                        final decoded = json.decode(response.body) as Map<String, dynamic>;
-                        setState(() {
-                          verified = decoded['result'];
-                        });
-                      }
+                      openCamera(1);
                     },
-                    child: Text("Verify"),
-                    color: Colors.lightBlueAccent,
-
-
+                    icon: Icon(Icons.camera_alt),
+                    label: Text('Take photo ID')),
+                SizedBox(
+                  width: 24.0,
                 ),
-                SizedBox(height: 40.0),
-                Text(verified),
+                FlatButton.icon(
+                    onPressed: () async {
+                      final result = openCamera(0);
+                    },
+                    icon: Icon(Icons.camera_alt),
+                    label: Text('Take Selfie')),
               ],
             ),
-          )
-      ),
+            SizedBox(height: 4.0),
+            Row(
+              children: [
+                _displayImage(idPath),
+                SizedBox(width: 12.0),
+                _displayImage(selfiePath),
+              ],
+            ),
+            SizedBox(height: 40.0),
+            FlatButton(
+              onPressed: () async {
+                // selfie encoding
+                io.File selfieFile = new io.File(selfiePath.toString());
+                List<int> selfieBytes = selfieFile.readAsBytesSync();
+                String selfieBase64 = base64Encode(selfieBytes);
+
+                // drivers license encoding
+                io.File dlFile = new io.File(idPath.toString());
+                List<int> dlBytes = dlFile.readAsBytesSync();
+                String dlBase64 = base64Encode(dlBytes);
+
+                // TODO: address is only for emulator
+                final url = Uri.parse('http://10.0.2.2:5000/');
+                final response = await http.post(url,
+                    body:
+                        json.encode({'selfie': selfieBase64, 'dl': dlBase64}));
+                if (response.statusCode != 200) {
+                  setState(() {
+                    verified = 'error';
+                  });
+                } else {
+                  final decoded =
+                      json.decode(response.body) as Map<String, dynamic>;
+                  setState(() {
+                    verified = decoded['result'];
+                  });
+                }
+              },
+              child: Text("Verify"),
+              color: Colors.lightBlueAccent,
+            ),
+            SizedBox(height: 40.0),
+            Text(verified),
+          ],
+        ),
+      )),
     );
   }
 
@@ -138,9 +137,7 @@ class _HomeState extends State<Home> {
       setState(() {
         selfiePath = result as String;
       });
-    }
-
-    else {
+    } else {
       setState(() {
         idPath = result as String;
       });
