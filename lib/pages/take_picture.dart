@@ -65,8 +65,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       floatingActionButton: FloatingActionButton(
         // Provide an onPressed callback.
         onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
           try {
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
@@ -75,11 +73,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             // where it was saved.
             final image = await _controller.takePicture();
 
-            // If the picture was taken, display it.
             Navigator.pop(context, image.path);
-            // await Navigator.pushReplacementNamed(context, '/home', arguments: {
-            //   'imagePath':image.path
-            // });
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);

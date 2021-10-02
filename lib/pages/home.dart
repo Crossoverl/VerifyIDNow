@@ -125,7 +125,6 @@ class _HomeState extends State<Home> {
     // 0: back camera
     // TODO: should pass cameraType when not using an emulator
     final camera = cameras[1];
-    // final result = await Navigator.pushNamed(context, '/take_picture');
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TakePictureScreen(
