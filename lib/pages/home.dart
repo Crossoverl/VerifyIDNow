@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
                       openCamera(1);
                     },
                     icon: Icon(Icons.camera_alt),
-                    label: Text('Take photo ID')),
+                    label: Text('Take Selfie')),
                 SizedBox(
                   width: 24.0,
                 ),
@@ -41,15 +41,15 @@ class _HomeState extends State<Home> {
                       final result = openCamera(0);
                     },
                     icon: Icon(Icons.camera_alt),
-                    label: Text('Take Selfie')),
+                    label: Text('Take photo ID')),
               ],
             ),
             SizedBox(height: 4.0),
             Row(
               children: [
-                _displayImage(idPath),
-                SizedBox(width: 12.0),
                 _displayImage(selfiePath),
+                SizedBox(width: 12.0),
+                _displayImage(idPath),
               ],
             ),
             SizedBox(height: 40.0),
@@ -65,8 +65,10 @@ class _HomeState extends State<Home> {
                 List<int> dlBytes = dlFile.readAsBytesSync();
                 String dlBase64 = base64Encode(dlBytes);
 
-                // TODO: address is only for emulator
+                // address for emulator:  10.0.2.2:5000
                 final url = Uri.parse('http://10.0.2.2:5000/');
+                // final url = Uri.parse('http://127.0.0.1:5000/');
+                // address for emulator:  127.0.0.1:5000
                 final response = await http.post(url,
                     body:
                         json.encode({'selfie': selfieBase64, 'dl': dlBase64}));
@@ -124,7 +126,7 @@ class _HomeState extends State<Home> {
     // 1: front camera
     // 0: back camera
     // TODO: should pass cameraType when not using an emulator
-    final camera = cameras[1];
+    final camera = cameras[0];
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TakePictureScreen(
@@ -132,7 +134,7 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-    if (cameraType == 0) {
+    if (cameraType == 1) {
       setState(() {
         selfiePath = result as String;
       });
