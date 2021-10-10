@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:camera/camera.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/take_picture.dart';
 import 'package:http/http.dart' as http;
@@ -65,10 +66,20 @@ class _HomeState extends State<Home> {
                 List<int> dlBytes = dlFile.readAsBytesSync();
                 String dlBase64 = base64Encode(dlBytes);
 
-                // address for emulator:  10.0.2.2:5000
-                final url = Uri.parse('http://10.0.2.2:5000/');
-                // final url = Uri.parse('http://127.0.0.1:5000/');
-                // address for emulator:  127.0.0.1:5000
+                final url;
+
+                DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                var androidInfo = await deviceInfo.androidInfo;
+                if(androidInfo.isPhysicalDevice ?? false){
+                  // address for physcial device:  127.0.0.1:5000
+                  url = Uri.parse('http://127.0.0.1:5000/');
+                }
+
+                else {
+                  // address for emulator:  10.0.2.2:5000
+                  url = Uri.parse('http://10.0.2.2:5000/');
+                }
+
                 final response = await http.post(url,
                     body:
                         json.encode({'selfie': selfieBase64, 'dl': dlBase64}));
