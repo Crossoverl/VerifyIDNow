@@ -50,47 +50,55 @@ def nameRoute():
         response = verify(selfie, dlPhoto)
         os.remove('selfie.jpg')
         os.remove('dl.jpg')
-        str_response = str(response)
-        return jsonify({'result' : str_response})
+        return jsonify({'result' : response})
     else:
         return jsonify({'result' : "test"})
 
 # #############################################################
-# # Load self photo and learn how to recognize it.
+# # Takes two photos and returns whether they are a match
 # #############################################################
 def verify(selfieBase64, dlBase64):
+
+    # Load self photo
     selfie_64_decode = base64.b64decode(selfieBase64) 
     selfie_result = open('selfie.jpg', 'wb') # create a writable image and write the decoding result
     selfie_result.write(selfie_64_decode)
     self_image = face_recognition.load_image_file("selfie.jpg")
+
+    #print how many faces were recognized
     print("selfie: " + str(len(face_recognition.face_encodings(self_image))))
 
+    if (len(face_recognition.face_encodings(self_image)) == 0):
+        return "Could not detect face in selfie"
+
+    # Load ID photo
     dl_64_decode = base64.b64decode(dlBase64) 
     dl_result = open('dl.jpg', 'wb') # create a writable image and write the decoding result
     dl_result.write(dl_64_decode)
     DL_image = face_recognition.load_image_file("dl.jpg")
+
+    #print how many faces were recognized
     print("DL: " + str(len(face_recognition.face_encodings(DL_image))))
+
+    if (len(face_recognition.face_encodings(DL_image)) == 0):
+        return "Could not detect face in ID photo"
     
+    # Get the first face recognized in selfie
     self_face_encoding = face_recognition.face_encodings(self_image)[0]
     # print("self encoding=",self_face_encoding)  #print 128 matrix
 
-# #############################################################
-# # Load drivers license DL photo and learn how to recognize it.
-# #############################################################
-    # dl_64_decode = base64.b64decode(dlBase64) 
-    dl_result = open('dl.jpg', 'wb') # create a writable image and write the decoding result
-    dl_result.write(dl_64_decode)
-    DL_image = face_recognition.load_image_file("dl.jpg")
+    # Get the first face recognized in ID
     DL_face_encoding = face_recognition.face_encodings(DL_image)[0]
     # print("DL encoding=",DL_face_encoding) #print 128 matrix
 
     DL_small_face_encoding = [DL_face_encoding]  #save in array
-# #############################################################
-# # compare self photo with drivers license photo
-# #############################################################
+
+    tolerance = 0.6
+
+    # compare self photo with drivers license photo
     match = face_recognition.compare_faces(DL_small_face_encoding, self_face_encoding)  
     print("match=",match) #match= [True] or match= [False] or out of range too small
-    return match        
+    return str(match)
 # ################ end of program ###########################
 
 if __name__ == "__main__":
