@@ -72,12 +72,12 @@ class _HomeState extends State<Home> {
                 var androidInfo = await deviceInfo.androidInfo;
                 if(androidInfo.isPhysicalDevice ?? false){
                   // address for physcial device:  127.0.0.1:5000
-                  url = Uri.parse('http://127.0.0.1:5000/');
+                  url = Uri.parse('http://127.0.0.1:5000/api/face');
                 }
 
                 else {
                   // address for emulator:  10.0.2.2:5000
-                  url = Uri.parse('http://10.0.2.2:5000/');
+                  url = Uri.parse('http://10.0.2.2:5000/api/face');
                 }
 
                 final response = await http.post(url,
@@ -137,7 +137,7 @@ class _HomeState extends State<Home> {
     // 1: front camera
     // 0: back camera
     // TODO: should pass cameraType when not using an emulator
-    final camera = cameras[0];
+    final camera = cameras[cameraType];
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TakePictureScreen(
