@@ -2,6 +2,8 @@
 //  Generated file. Do not edit.
 //
 
+// clang-format off
+
 #import "GeneratedPluginRegistrant.h"
 
 #if __has_include(<camera/CameraPlugin.h>)
@@ -28,12 +30,6 @@
 @import path_provider;
 #endif
 
-#if __has_include(<tflite/TflitePlugin.h>)
-#import <tflite/TflitePlugin.h>
-#else
-@import tflite;
-#endif
-
 #if __has_include(<tflite_flutter/TfliteFlutterPlugin.h>)
 #import <tflite_flutter/TfliteFlutterPlugin.h>
 #else
@@ -47,7 +43,6 @@
   [FLTDeviceInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTDeviceInfoPlusPlugin"]];
   [GoogleMlKitPlugin registerWithRegistrar:[registry registrarForPlugin:@"GoogleMlKitPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
-  [TflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"TflitePlugin"]];
   [TfliteFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"TfliteFlutterPlugin"]];
 }
 
