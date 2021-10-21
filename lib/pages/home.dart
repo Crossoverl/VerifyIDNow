@@ -149,6 +149,16 @@ class _HomeState extends State<Home> {
       return;
     }
 
+    if (result[1] == null) {
+      print('could not detect face');
+      return;
+    }
+
+    if (result[2] == '' || result[2] == null) {
+      print('could not image path');
+      return;
+    }
+
     // selfie returned
     if (cameraType == 1) {
       setState(() {

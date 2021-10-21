@@ -63,8 +63,8 @@ class CameraService {
 
   /// returns the image size 📏
   Size? getImageSize() {
-    double? height = _cameraController?.value?.previewSize?.height;
-    double? width = _cameraController?.value?.previewSize?.width;
+    double height = _cameraController.value.previewSize!.height;
+    double width = _cameraController.value.previewSize!.width;
 
     if (height == null || width == null) {
       return null;
