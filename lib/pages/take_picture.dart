@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app1/services/ml_kit_service.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -18,6 +20,7 @@ class TakePictureScreen extends StatefulWidget {
 }
 
 class TakePictureScreenState extends State<TakePictureScreen> {
+  MLKitService _mlKitService = MLKitService();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
 
@@ -69,16 +72,39 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
 
+            final fileImage = await _controller.takePicture();
+
             // Attempt to take a picture and get the file `image`
             // where it was saved.
-            final image = await _controller.takePicture();
+            Face? faceDetected;
+            CameraImage? cameraImage;
+            _controller.startImageStream((image) async {
 
-            Navigator.pop(context, image.path);
+                try {
+                  cameraImage = image;
+                  List<Face>? faces = await _mlKitService.getFacesFromImage(
+                      image);
+
+                  if (faces != null) {
+                    if (faces.length > 0) {
+                      faceDetected = faces[0];
+                    } else {
+                        faceDetected = null;
+                    }
+                  }
+                } catch (e) {
+                  print(e);
+
+                }
+              });
+
+            Navigator.pop(context, [cameraImage, faceDetected, fileImage.path]);
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
           }
-        },
+        }
+    ,
         child: const Icon(Icons.camera_alt),
       ),
     );

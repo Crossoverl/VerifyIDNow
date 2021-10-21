@@ -5,9 +5,14 @@ import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/take_picture.dart';
+import 'package:flutter_app1/services/camera.service.dart';
+import 'package:flutter_app1/services/ml_kit_service.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:http/http.dart' as http;
+import '../services/facenet.service.dart';
 
 class Home extends StatefulWidget {
+  late final CameraDescription cameraDescription;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -17,6 +22,33 @@ class _HomeState extends State<Home> {
   String selfiePath = '';
   String idPath = '';
   String verified = '';
+  late String imagePath;
+  late Size? imageSize;
+
+  late CameraImage selfieImage;
+  late Face selfieFace;
+
+  late CameraImage idImage;
+  late Face idFace;
+
+  late Future _initializeControllerFuture;
+
+  bool cameraInitializated = false;
+  bool pictureTaked = false;
+
+  // switchs when the user press the camera
+  bool _saving = false;
+  bool _bottomSheetVisible = false;
+
+  // Services injection
+  CameraService _cameraService = CameraService();
+  FaceNetService _faceNetService = FaceNetService();
+  MLKitService _mlKitService = MLKitService();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +71,7 @@ class _HomeState extends State<Home> {
                 ),
                 FlatButton.icon(
                     onPressed: () async {
-                      final result = openCamera(0);
+                      openCamera(0);
                     },
                     icon: Icon(Icons.camera_alt),
                     label: Text('Take photo ID')),
@@ -56,44 +88,10 @@ class _HomeState extends State<Home> {
             SizedBox(height: 40.0),
             FlatButton(
               onPressed: () async {
-                // selfie encoding
-                io.File selfieFile = new io.File(selfiePath.toString());
-                List<int> selfieBytes = selfieFile.readAsBytesSync();
-                String selfieBase64 = base64Encode(selfieBytes);
-
-                // drivers license encoding
-                io.File dlFile = new io.File(idPath.toString());
-                List<int> dlBytes = dlFile.readAsBytesSync();
-                String dlBase64 = base64Encode(dlBytes);
-
-                final url;
-
-                DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-                var androidInfo = await deviceInfo.androidInfo;
-                if(androidInfo.isPhysicalDevice ?? false){
-                  // address for physcial device:  127.0.0.1:5000
-                  url = Uri.parse('http://127.0.0.1:5000/api/face');
-                }
-
-                else {
-                  // address for emulator:  10.0.2.2:5000
-                  url = Uri.parse('http://10.0.2.2:5000/api/face');
-                }
-
-                final response = await http.post(url,
-                    body:
-                        json.encode({'selfie': selfieBase64, 'dl': dlBase64}));
-                if (response.statusCode != 200) {
+                final response = _faceNetService.predict();
                   setState(() {
-                    verified = 'error';
-                  });
-                } else {
-                  final decoded =
-                      json.decode(response.body) as Map<String, dynamic>;
-                  setState(() {
-                    verified = decoded['result'];
-                  });
-                }
+                  verified = response;
+                });
               },
               child: Text("Verify"),
               color: Colors.lightBlueAccent,
@@ -145,13 +143,28 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+
+    if (result[0] == null) {
+      print('could not get image');
+      return;
+    }
+
+    // selfie returned
     if (cameraType == 1) {
       setState(() {
-        selfiePath = result as String;
+        selfieImage = result[0];
+        selfieFace = result[1];
+        selfiePath = result[2];
+        _faceNetService.setCurrentPrediction(
+            selfieImage, selfieFace);
       });
     } else {
       setState(() {
-        idPath = result as String;
+        idImage = result[0];
+        idFace = result[1];
+        idPath = result[2];
+        _faceNetService.setidData(
+            idImage, idFace);
       });
     }
   }
