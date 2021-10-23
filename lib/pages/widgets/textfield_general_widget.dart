@@ -40,6 +40,7 @@ class _TextfieldGeneralWidgetState extends State<TextfieldGeneralWidget> {
             ButtonWidget(
               text: 'Submit',
               onClicked: () {
+                Navigator.of(context, rootNavigator: true).pushNamed('/take_photo');
                 print('Name: ${emailController.text}');
                 print('Company: ${companyController.text}');
                 print('Service: ${serviceController.text}');

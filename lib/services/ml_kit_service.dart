@@ -28,38 +28,38 @@ class MLKitService {
     );
   }
 
-  Future<List<Face>>? getFacesFromImage(CameraImage image) async {
+  Future<List<Face>>? getFacesFromImage(InputImage image) async {
 
     /// preprocess the image  🧑🏻‍🔧
 
-    InputImageFormat? inputImageFormat = InputImageFormatMethods.fromRawValue(image.format.raw);
-    if (inputImageFormat == null) {
-      return [];
-    }
-    InputImageData _firebaseImageMetadata = InputImageData(
-      imageRotation: _cameraService.cameraRotation,
-      inputImageFormat: inputImageFormat,
-      size: Size(image.width.toDouble(), image.height.toDouble()),
-      planeData: image.planes.map(
-            (Plane plane) {
-          return InputImagePlaneMetadata(
-            bytesPerRow: plane.bytesPerRow,
-            height: plane.height,
-            width: plane.width,
-          );
-        },
-      ).toList(),
-    );
-
-    /// Transform the image input for the _faceDetector 🎯
-    InputImage _firebaseVisionImage = InputImage.fromBytes(
-      bytes: image.planes[0].bytes,
-      inputImageData: _firebaseImageMetadata,
-    );
+    // InputImageFormat? inputImageFormat = InputImageFormatMethods.fromRawValue(image.format.raw);
+    // if (inputImageFormat == null) {
+    //   return [];
+    // }
+    // InputImageData _firebaseImageMetadata = InputImageData(
+    //   imageRotation: _cameraService.cameraRotation,
+    //   inputImageFormat: inputImageFormat,
+    //   size: Size(image.width.toDouble(), image.height.toDouble()),
+    //   planeData: image.planes.map(
+    //         (Plane plane) {
+    //       return InputImagePlaneMetadata(
+    //         bytesPerRow: plane.bytesPerRow,
+    //         height: plane.height,
+    //         width: plane.width,
+    //       );
+    //     },
+    //   ).toList(),
+    // );
+    //
+    // /// Transform the image input for the _faceDetector 🎯
+    // InputImage _firebaseVisionImage = InputImage.fromBytes(
+    //   bytes: image.planes[0].bytes,
+    //   inputImageData: _firebaseImageMetadata,
+    // );
 
     /// proces the image and makes inference 🤖
     List<Face> faces =
-    await this._faceDetector.processImage(_firebaseVisionImage);
+    await this._faceDetector.processImage(image);
     return faces;
   }
 }

@@ -60,7 +60,7 @@ class FaceNetService {
 
 
   // use for selfie
-  setCurrentPrediction(CameraImage cameraImage, Face? face) {
+  setSelfieData(String imagePath, Face? face) async {
 
     if (face == null) {
       print('failed to process image');
@@ -68,7 +68,7 @@ class FaceNetService {
     }
 
     /// crops the face from the image and transforms it to an array of data
-    List? input = _preProcess(cameraImage, face);
+    List? input = await _preProcess(imagePath, face);
 
     if (input == null) {
       print('failed to process image');
@@ -87,7 +87,7 @@ class FaceNetService {
   }
 
   // id
-  setidData(CameraImage cameraImage, Face? face) {
+  setidData(String imagePath, Face? face) async {
 
     if (face == null) {
       print('failed to process image');
@@ -95,7 +95,7 @@ class FaceNetService {
     }
 
     /// crops the face from the image and transforms it to an array of data
-    List? input = _preProcess(cameraImage, face);
+    List? input = await _preProcess(imagePath, face);
 
     if (input == null) {
       print('failed to process image');
@@ -123,9 +123,9 @@ class FaceNetService {
   /// to detect and transforms it to model input.
   /// [cameraImage]: current image
   /// [face]: face detected
-  List? _preProcess(CameraImage image, Face faceDetected) {
+  Future<List?> _preProcess(String imagePath, Face faceDetected) async {
     // crops the face 💇
-    imglib.Image? croppedImage = _cropFace(image, faceDetected);
+    imglib.Image? croppedImage = await _cropFace(imagePath, faceDetected);
 
     if (croppedImage == null) {
       return null;
@@ -141,8 +141,10 @@ class FaceNetService {
   /// crops the face from the image 💇
   /// [cameraImage]: current image
   /// [face]: face detected
-  imglib.Image? _cropFace(CameraImage image, Face faceDetected) {
-    imglib.Image? convertedImage = _convertCameraImage(image);
+  Future<imglib.Image?> _cropFace(String imagePath, Face faceDetected) async {
+    // imglib.Image? convertedImage = _convertCameraImage(image);
+    final bytes = await File(imagePath).readAsBytes();
+    final imglib.Image? convertedImage = imglib.decodeImage(bytes);
 
     if (convertedImage == null) {
       return null;

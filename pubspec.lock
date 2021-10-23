@@ -23,7 +23,7 @@ packages:
     source: hosted
     version: "2.1.0"
   camera:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: camera
       url: "https://pub.dartlang.org"
@@ -176,7 +176,7 @@ packages:
       name: google_ml_kit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.1"
+    version: "0.7.2"
   http:
     dependency: "direct main"
     description:
@@ -220,14 +220,14 @@ packages:
     source: hosted
     version: "1.7.0"
   path:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
   path_provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"

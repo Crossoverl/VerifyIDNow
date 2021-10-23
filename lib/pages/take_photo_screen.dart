@@ -7,13 +7,13 @@ import 'package:flutter_app1/services/ml_kit_service.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import '../services/facenet.service.dart';
 
-class Home extends StatefulWidget {
+class TakePhoto extends StatefulWidget {
   late final CameraDescription cameraDescription;
   @override
-  _HomeState createState() => _HomeState();
+  _TakePhotoState createState() => _TakePhotoState();
 }
 
-class _HomeState extends State<Home> {
+class _TakePhotoState extends State<TakePhoto> {
   Map data = {};
   String selfiePath = '';
   String idPath = '';

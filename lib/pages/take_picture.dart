@@ -88,40 +88,26 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         onPressed: () async {
           try {
 
-            imageSize = _cameraService.getImageSize()!;
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
 
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
             Face? faceDetected;
-            CameraImage? cameraImage;
-            _cameraService.cameraController.startImageStream((image) async {
 
-                try {
-                  cameraImage = image;
-                  List<Face>? faces = await _mlKitService.getFacesFromImage(
-                      image);
-
-                  if (faces != null) {
-                    if (faces.length > 0) {
-                      faceDetected = faces[0];
-                    } else {
-                        faceDetected = null;
-                    }
-                  }
-                } catch (e) {
-                  print(e);
-
-                }
-              });
-
-            await Future.delayed(Duration(milliseconds: 500));
-            await _cameraService.cameraController.stopImageStream();
-            await Future.delayed(Duration(milliseconds: 200));
+            // Attempt to take a picture and get the file `fileImage`
+            // where it was saved.
             XFile fileImage = await _cameraService.cameraController.takePicture();
+            final inputImage = InputImage.fromFilePath(fileImage.path);
+            List<Face>? faces = await _mlKitService.getFacesFromImage(
+                inputImage);
 
-            Navigator.pop(context, [cameraImage, faceDetected, fileImage.path]);
+            if (faces != null && faces.isNotEmpty) {
+              if (faces.length > 0) {
+                faceDetected = faces[0];
+              } else {
+                faceDetected = null;
+              }
+            }
+            Navigator.pop(context, [fileImage.path, faceDetected]);
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
