@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app1/services/camera.service.dart';
 import 'package:flutter_app1/services/ml_kit_service.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
@@ -21,28 +22,45 @@ class TakePictureScreen extends StatefulWidget {
 
 class TakePictureScreenState extends State<TakePictureScreen> {
   MLKitService _mlKitService = MLKitService();
-  late CameraController _controller;
+  CameraService _cameraService = CameraService();
   late Future<void> _initializeControllerFuture;
+
+  bool cameraInitializated = false;
+  bool _detectingFaces = false;
+  bool pictureTaked = false;
+
+  // switchs when the user press the camera
+  bool _saving = false;
+  bool _bottomSheetVisible = false;
+
+  late String imagePath;
+  late Size imageSize;
+  late Face faceDetected;
 
   @override
   void initState() {
     super.initState();
-    // To display the current output from the Camera,
-    // create a CameraController.
-    _controller = CameraController(
-      widget.camera,
-      // Define the resolution to use.
-      ResolutionPreset.medium,
-    );
 
-    // Next, initialize the controller. This returns a Future.
-    _initializeControllerFuture = _controller.initialize();
+    /// starts the camera
+    _start();
+  }
+
+  /// starts the camera
+  _start() async {
+    _initializeControllerFuture =
+        _cameraService.startService(widget.camera);
+    await _initializeControllerFuture;
+
+    setState(() {
+      cameraInitializated = true;
+    });
+
   }
 
   @override
   void dispose() {
     // Dispose of the controller when the widget is disposed.
-    _controller.dispose();
+    _cameraService.dispose();
     super.dispose();
   }
 
@@ -58,7 +76,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             // If the Future is complete, display the preview.
-            return CameraPreview(_controller);
+            return CameraPreview(_cameraService.cameraController);
           } else {
             // Otherwise, display a loading indicator.
             return const Center(child: CircularProgressIndicator());
@@ -69,16 +87,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         // Provide an onPressed callback.
         onPressed: () async {
           try {
+
+            imageSize = _cameraService.getImageSize()!;
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
-
-            final fileImage = await _controller.takePicture();
 
             // Attempt to take a picture and get the file `image`
             // where it was saved.
             Face? faceDetected;
             CameraImage? cameraImage;
-            _controller.startImageStream((image) async {
+            _cameraService.cameraController.startImageStream((image) async {
 
                 try {
                   cameraImage = image;
@@ -97,6 +115,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
                 }
               });
+
+            await Future.delayed(Duration(milliseconds: 500));
+            await _cameraService.cameraController.stopImageStream();
+            await Future.delayed(Duration(milliseconds: 200));
+            XFile fileImage = await _cameraService.cameraController.takePicture();
 
             Navigator.pop(context, [cameraImage, faceDetected, fileImage.path]);
           } catch (e) {
