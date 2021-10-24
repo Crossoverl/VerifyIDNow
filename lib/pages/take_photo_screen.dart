@@ -34,6 +34,8 @@ class _TakePhotoState extends State<TakePhoto> {
   bool _saving = false;
   bool _bottomSheetVisible = false;
 
+  late bool _isButtonDisabled;
+
   // Services injection
   FaceNetService _faceNetService = FaceNetService();
   MLKitService _mlKitService = MLKitService();
@@ -41,6 +43,7 @@ class _TakePhotoState extends State<TakePhoto> {
   @override
   void initState() {
     super.initState();
+    this._isButtonDisabled = true;
     _startUp();
   }
 
@@ -49,9 +52,26 @@ class _TakePhotoState extends State<TakePhoto> {
     _mlKitService.initialize();
   }
 
+  _verifyImages() {
+    final response = _faceNetService.predict();
+    setState(() {
+      verified = response;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Take photos'),
+        backgroundColor: Colors.lightBlue,
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back_ios, color: Colors.grey),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -86,14 +106,9 @@ class _TakePhotoState extends State<TakePhoto> {
             ),
             SizedBox(height: 40.0),
             FlatButton(
-              onPressed: () async {
-                final response = _faceNetService.predict();
-                  setState(() {
-                  verified = response;
-                });
-              },
+              onPressed: _isButtonDisabled ? null : _verifyImages,
               child: Text("Verify"),
-              color: Colors.lightBlueAccent,
+              color: _isButtonDisabled ? Colors.red[900] : Colors.lightBlueAccent,
             ),
             SizedBox(height: 40.0),
             Text(verified),
@@ -159,6 +174,9 @@ class _TakePhotoState extends State<TakePhoto> {
         selfieFace = result[1];
         _faceNetService.setSelfieData(
             selfiePath, selfieFace);
+        if (idPath.isNotEmpty) {
+          this._isButtonDisabled = false;
+        }
       });
     } else {
       setState(() {
@@ -166,6 +184,9 @@ class _TakePhotoState extends State<TakePhoto> {
         idFace = result[1];
         _faceNetService.setidData(
             idPath, idFace);
+        if (selfiePath.isNotEmpty) {
+          this._isButtonDisabled = false;
+        }
       });
     }
   }
