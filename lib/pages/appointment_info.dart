@@ -13,7 +13,7 @@ Future main() async {
 }
 
 class Info extends StatelessWidget {
-  static final String title = 'TextField';
+  static final String title = 'Information';
 
   @override
   Widget build(BuildContext context) => MaterialApp(

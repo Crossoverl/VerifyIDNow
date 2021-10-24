@@ -2,13 +2,16 @@ import 'dart:io' as io;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app1/pages/take_picture.dart';
+import 'package:flutter_app1/pages/camera_screen.dart';
+import 'package:flutter_app1/pages/verification_screen.dart';
 import 'package:flutter_app1/services/ml_kit_service.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+
 import '../services/facenet.service.dart';
 
 class TakePhoto extends StatefulWidget {
   late final CameraDescription cameraDescription;
+
   @override
   _TakePhotoState createState() => _TakePhotoState();
 }
@@ -30,10 +33,6 @@ class _TakePhotoState extends State<TakePhoto> {
   bool cameraInitializated = false;
   bool pictureTaked = false;
 
-  // switchs when the user press the camera
-  bool _saving = false;
-  bool _bottomSheetVisible = false;
-
   late bool _isButtonDisabled;
 
   // Services injection
@@ -54,9 +53,19 @@ class _TakePhotoState extends State<TakePhoto> {
 
   _verifyImages() {
     final response = _faceNetService.predict();
+
+    //TODO: remove, currently for testing
     setState(() {
       verified = response;
     });
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Verification(
+          result: response,
+        ),
+      ),
+    );
   }
 
   @override
@@ -108,10 +117,23 @@ class _TakePhotoState extends State<TakePhoto> {
             FlatButton(
               onPressed: _isButtonDisabled ? null : _verifyImages,
               child: Text("Verify"),
-              color: _isButtonDisabled ? Colors.red[900] : Colors.lightBlueAccent,
+              color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
             ),
             SizedBox(height: 40.0),
             Text(verified),
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Verification(
+                      result: 'test',
+                    ),
+                  ),
+                );
+              },
+              child: Text("Skip"),
+              color: Colors.lightBlueAccent,
+            ),
           ],
         ),
       )),
@@ -138,7 +160,7 @@ class _TakePhotoState extends State<TakePhoto> {
     }
   }
 
-  Future<void> openCamera(int cameraType) async {
+  Future<void> openCamera(int cameraDescription) async {
     // Ensure that plugin services are initialized so that `availableCameras()`
     // can be called
     WidgetsFlutterBinding.ensureInitialized();
@@ -148,10 +170,10 @@ class _TakePhotoState extends State<TakePhoto> {
 
     // 1: front camera
     // 0: back camera
-    final camera = cameras[cameraType];
+    final camera = cameras[cameraDescription];
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => TakePictureScreen(
+        builder: (context) => CameraScreen(
           camera: camera,
         ),
       ),
@@ -168,22 +190,23 @@ class _TakePhotoState extends State<TakePhoto> {
     }
 
     // selfie returned
-    if (cameraType == 1) {
+    if (cameraDescription == 1) {
       setState(() {
         selfiePath = result[0];
         selfieFace = result[1];
-        _faceNetService.setSelfieData(
-            selfiePath, selfieFace);
+        _faceNetService.setSelfieData(selfiePath, selfieFace);
         if (idPath.isNotEmpty) {
           this._isButtonDisabled = false;
         }
       });
-    } else {
+    }
+
+    // id photo returned
+    else {
       setState(() {
         idPath = result[0];
         idFace = result[1];
-        _faceNetService.setidData(
-            idPath, idFace);
+        _faceNetService.setidData(idPath, idFace);
         if (selfiePath.isNotEmpty) {
           this._isButtonDisabled = false;
         }
