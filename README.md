@@ -1,16 +1,4 @@
 # flutter_app1
 
-instructions:
-run: flask run
+![Alt Text](https://imgur.com/4ZNrxUO.gif)
 
-if using physical android device:
-
-cd into 
-
-C:\Users\username\AppData\Local\Android\Sdk\platform-tools>
-
-(enter valid username)
-
-run: 
-
-adb reverse tcp:5000 tcp:5000

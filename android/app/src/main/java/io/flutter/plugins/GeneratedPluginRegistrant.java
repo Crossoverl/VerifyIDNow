@@ -31,9 +31,19 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin flutter_plugin_android_lifecycle, io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin", e);
     }
     try {
+      flutterEngine.getPlugins().add(new com.google_ml_kit.GoogleMlKitPlugin());
+    } catch(Exception e) {
+      Log.e(TAG, "Error registering plugin google_ml_kit, com.google_ml_kit.GoogleMlKitPlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.pathprovider.PathProviderPlugin());
     } catch(Exception e) {
       Log.e(TAG, "Error registering plugin path_provider, io.flutter.plugins.pathprovider.PathProviderPlugin", e);
+    }
+    try {
+      flutterEngine.getPlugins().add(new com.tfliteflutter.tflite_flutter_plugin.TfliteFlutterPlugin());
+    } catch(Exception e) {
+      Log.e(TAG, "Error registering plugin tflite_flutter, com.tfliteflutter.tflite_flutter_plugin.TfliteFlutterPlugin", e);
     }
   }
 }
