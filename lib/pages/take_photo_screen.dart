@@ -72,7 +72,7 @@ class _TakePhotoState extends State<TakePhoto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Take photos'),
+        title: Text('Identification'),
         backgroundColor: Colors.lightBlue,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: Colors.grey),
