@@ -88,28 +88,19 @@ class CameraScreenState extends State<CameraScreen> {
             // Attempt to take a picture and get the file `fileImage`
             // where it was saved.
             XFile fileImage =
-                await _cameraService.takePicture();
+                await _cameraService.cameraController.takePicture();
             final inputImage = InputImage.fromFilePath(fileImage.path);
             List<Face>? faces =
                 await _mlKitService.getFacesFromImage(inputImage);
 
-            if (faces != null) {
+            if (faces != null && faces.isNotEmpty) {
               if (faces.length > 0) {
                 faceDetected = faces[0];
-                Navigator.pop(context, [fileImage.path, faceDetected]);
               } else {
                 faceDetected = null;
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: Text('No face detected!'),
-                    );
-                  },
-                );
               }
             }
-
+            Navigator.pop(context, [fileImage.path, faceDetected]);
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
