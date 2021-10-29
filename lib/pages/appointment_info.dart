@@ -13,6 +13,7 @@ Future main() async {
 }
 
 class Info extends StatelessWidget {
+  const Info({Key? key}) : super(key: key);
   static final String title = 'Information';
 
   @override
@@ -48,7 +49,7 @@ class _MainPageState extends State<MainPage> {
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back_ios, color: Colors.grey),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context, rootNavigator: true).pop(context);
             },
           ),
         ),
