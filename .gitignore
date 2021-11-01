@@ -45,14 +45,3 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/.gradle
-/android/local.properties
-/android/**/GeneratedPluginRegistrant.java
-
-# iOS/XCode related
-**/ios/Runner/GeneratedPluginRegistrant.*
-
-# Visual Studio Code related
-.classpath
-.project
-.settings/
-.vscode/
