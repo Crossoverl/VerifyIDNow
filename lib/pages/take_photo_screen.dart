@@ -123,14 +123,6 @@ class _TakePhotoState extends State<TakePhoto> {
                 setState(() {
                   tries = tries + 1;
                 });
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Verification(
-                      result: verified,
-                      tries: tries,
-                    ),
-                  ),
-                );
               },
               child: Text("Verify"),
               color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,

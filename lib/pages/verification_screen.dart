@@ -18,7 +18,7 @@ class Verification extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (result == 'true' && tries < 3) ...[
+            if (result == "true" && tries < 3) ...[
               Center(
                 child:
                   Padding(
@@ -53,7 +53,7 @@ class Verification extends StatelessWidget {
               },
               ),
             ]
-            else if (result == 'false' && tries <= 3)...[
+            else if (result == "false" && tries <= 3)...[
                 Padding(
                   padding: EdgeInsets.all(10.0),
                   child:
@@ -105,8 +105,8 @@ class Verification extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.all(20.0),
                   child:
-                  Text('We were unable to verify your identity.',
-                  textAlign: TextAlign.center,
+                    Text('We were unable to verify your identity.',
+                    textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold,
                   color: CupertinoColors.black,
                   fontSize: 35
