@@ -21,6 +21,7 @@ class _TakePhotoState extends State<TakePhoto> {
   String selfiePath = '';
   String idPath = '';
   String verified = '';
+  int tries = 0;
   late String imagePath;
   late Size? imageSize;
 
@@ -63,6 +64,7 @@ class _TakePhotoState extends State<TakePhoto> {
       MaterialPageRoute(
         builder: (context) => Verification(
           result: response,
+          tries: 0,
         ),
       ),
     );
@@ -115,7 +117,13 @@ class _TakePhotoState extends State<TakePhoto> {
             ),
             SizedBox(height: 40.0),
             FlatButton(
-              onPressed: _isButtonDisabled ? null : _verifyImages,
+              onPressed: (_isButtonDisabled)? null : ()
+              {
+                _verifyImages;
+                setState(() {
+                  tries = tries + 1;
+                });
+              },
               child: Text("Verify"),
               color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
             ),
@@ -123,10 +131,14 @@ class _TakePhotoState extends State<TakePhoto> {
             Text(verified),
             FlatButton(
               onPressed: () {
+                setState(() {
+                    tries = tries + 1;
+                });
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Verification(
-                      result: 'test',
+                      result: 'hah',
+                      tries: tries,
                     ),
                   ),
                 );

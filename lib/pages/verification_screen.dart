@@ -65,22 +65,40 @@ class Verification extends StatelessWidget {
                 )
               )),
               Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(15.0),
                 child:
                 Text(
-                    'The company has been notified of the issue.',
+                    'Please try again.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold,
                         color: CupertinoColors.black,
                         fontSize: 20)
                 ),
               ),
-              RoundedButton(text: 'RETRY', onClicked: () {
-                int count = 0;
-                Navigator.of(context).popUntil((route) {
-                  return count++ == 1;
-                });
-              },
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  child:
+                  Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 5.0),
+                        child:
+                          Text('Number of tries remaining: ' + tries.toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: CupertinoColors.systemRed,
+                                  fontSize: 20)
+                          ),
+                      ),
+                      RoundedButton(text: 'RETRY', onClicked: () {
+                        int count = 0;
+                        Navigator.of(context).popUntil((route) {
+                          return count++ == 1;
+                        });
+                      }
+                      )
+                  ]
+                ),
               ),
             ]
             else ...[
@@ -103,7 +121,7 @@ class Verification extends StatelessWidget {
               )
             ],
 
-            Text(tries.toString()),
+            // Text(tries.toString()),
             SizedBox(
               height: 100.0,
             ),
