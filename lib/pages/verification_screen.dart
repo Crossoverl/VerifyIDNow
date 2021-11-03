@@ -18,7 +18,7 @@ class Verification extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (result == 'test' && tries == 3) ...[
+            if (result == 'true' && tries < 3) ...[
               Center(
                 child:
                   Padding(
@@ -53,7 +53,7 @@ class Verification extends StatelessWidget {
               },
               ),
             ]
-            else if (tries <= 3)...[
+            else if (result == 'false' && tries <= 3)...[
                 Padding(
                   padding: EdgeInsets.all(10.0),
                   child:
