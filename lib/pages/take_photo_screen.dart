@@ -85,39 +85,50 @@ class _TakePhotoState extends State<TakePhoto> {
           child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Spacer(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FlatButton.icon(
-                    onPressed: () async {
-                      openCamera(1);
-                    },
-                    icon: Icon(Icons.camera_alt),
-                    label: Text('Take Selfie')),
-                SizedBox(
-                  width: 24.0,
+                Container(
+                  margin: EdgeInsets.all(4.0),
+                  child: SizedBox(
+                    width: 150.0,
+                    child: TextButton.icon(
+                      onPressed: () async {openCamera(1);},
+                      icon: Icon(Icons.camera_alt, color: Colors.white,),
+                      label: Text('Take Selfie', style: TextStyle(color: Colors.white),),
+                      style: TextButton.styleFrom(backgroundColor: Colors.blue[400]),
+                    ),
+                  ),
                 ),
-                FlatButton.icon(
-                    onPressed: () async {
-                      openCamera(0);
-                    },
-                    icon: Icon(Icons.camera_alt),
-                    label: Text('Take photo ID')),
+                SizedBox(
+                  width: 12.0,
+                ),
+                Container(
+                  margin: EdgeInsets.all(4.0),
+                  child: SizedBox(
+                    width: 150.0,
+                    child: TextButton.icon(
+                      onPressed: () async {openCamera(0);},
+                      icon: Icon(Icons.camera_alt, color: Colors.white,),
+                      label: Text('Take photo ID', style: TextStyle(color: Colors.white),),
+                      style: TextButton.styleFrom(backgroundColor: Colors.blue[400]),
+                    ),
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: 4.0),
+            SizedBox(height: 24.0),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _displayImage(selfiePath),
                 SizedBox(width: 12.0),
                 _displayImage(idPath),
               ],
-            ),
-            SizedBox(height: 40.0),
-            FlatButton(
-              onPressed: _isButtonDisabled ? null : _verifyImages,
-              child: Text("Verify"),
-              color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
             ),
             SizedBox(height: 40.0),
             Text(verified),
@@ -133,6 +144,22 @@ class _TakePhotoState extends State<TakePhoto> {
               },
               child: Text("Skip"),
               color: Colors.lightBlueAccent,
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: FlatButton(
+                  color: Colors.lightBlueAccent,
+                  disabledColor: Colors.grey[400],
+                  onPressed: _isButtonDisabled ? null : _verifyImages,
+                  child: Text(
+                    'Next',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
