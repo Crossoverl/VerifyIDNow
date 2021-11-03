@@ -55,12 +55,6 @@ class _TakePhotoState extends State<TakePhoto> {
   _verifyImages() {
     final response = _faceNetService.predict();
 
-    //TODO: remove, currently for testing
-    setState(() {
-      verified = response;
-      tries = tries + 1;
-    });
-
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Verification(
