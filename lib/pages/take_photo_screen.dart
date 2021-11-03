@@ -55,16 +55,11 @@ class _TakePhotoState extends State<TakePhoto> {
   _verifyImages() {
     final response = _faceNetService.predict();
 
-    //TODO: remove, currently for testing
-    setState(() {
-      verified = response;
-    });
-
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Verification(
-          result: response,
-          tries: 0,
+          result: verified,
+          tries: tries,
         ),
       ),
     );
@@ -120,9 +115,6 @@ class _TakePhotoState extends State<TakePhoto> {
               onPressed: (_isButtonDisabled)? null : ()
               {
                 _verifyImages();
-                setState(() {
-                  tries = tries + 1;
-                });
               },
               child: Text("Verify"),
               color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
@@ -137,7 +129,7 @@ class _TakePhotoState extends State<TakePhoto> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Verification(
-                      result: verified,
+                      result: "false",
                       tries: tries,
                     ),
                   ),
