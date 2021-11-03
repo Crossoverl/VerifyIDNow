@@ -92,9 +92,7 @@ class Verification extends StatelessWidget {
                       ),
                       RoundedButton(text: 'RETRY', color: 0xFF1DDE7D, onClicked: () {
                         int count = 0;
-                        Navigator.of(context).popUntil((route) {
-                          return count++ == 1;
-                        });
+                        Navigator.of(context).pop();
                       }
                       )
                   ]

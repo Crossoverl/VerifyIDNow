@@ -58,13 +58,14 @@ class _TakePhotoState extends State<TakePhoto> {
     //TODO: remove, currently for testing
     setState(() {
       verified = response;
+      tries = tries + 1;
     });
 
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Verification(
-          result: response,
-          tries: 0,
+          result: verified,
+          tries: tries,
         ),
       ),
     );
@@ -120,17 +121,6 @@ class _TakePhotoState extends State<TakePhoto> {
               onPressed: (_isButtonDisabled)? null : ()
               {
                 _verifyImages();
-                setState(() {
-                  tries = tries + 1;
-                });
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Verification(
-                      result: verified,
-                      tries: tries,
-                    ),
-                  ),
-                );
               },
               child: Text("Verify"),
               color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
@@ -145,7 +135,7 @@ class _TakePhotoState extends State<TakePhoto> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Verification(
-                      result: verified,
+                      result: "false",
                       tries: tries,
                     ),
                   ),
