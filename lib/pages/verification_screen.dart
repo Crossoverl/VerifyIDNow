@@ -18,7 +18,7 @@ class Verification extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (result == 'test' && tries <= 3) ...[
+            if (result == 'test' && tries == 3) ...[
               Center(
                 child:
                   Padding(
@@ -45,7 +45,7 @@ class Verification extends StatelessWidget {
                   fontSize: 20)
                   )
               ),
-              RoundedButton(text: 'RETURN HOME', onClicked: () {
+              RoundedButton(text: 'RETURN HOME', color: 0xFF1DDE7D, onClicked: () {
                 int count = 0;
                 Navigator.of(context).popUntil((route) {
                   return count++ == 3;
@@ -83,14 +83,14 @@ class Verification extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(bottom: 5.0),
                         child:
-                          Text('Number of tries remaining: ' + tries.toString(),
+                          Text('Number of attempts left: ' +  (4-tries).toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   color: CupertinoColors.systemRed,
                                   fontSize: 20)
                           ),
                       ),
-                      RoundedButton(text: 'RETRY', onClicked: () {
+                      RoundedButton(text: 'RETRY', color: 0xFF1DDE7D, onClicked: () {
                         int count = 0;
                         Navigator.of(context).popUntil((route) {
                           return count++ == 1;
@@ -112,7 +112,7 @@ class Verification extends StatelessWidget {
                   fontSize: 35
                   )
               )),
-              RoundedButton(text: 'RETURN HOME', onClicked: () {
+              RoundedButton(text: 'RETURN HOME', color: 0xFF1DDE7D, onClicked: () {
               int count = 0;
               Navigator.of(context).popUntil((route) {
                 return count++ == 3;
