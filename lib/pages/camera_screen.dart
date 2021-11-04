@@ -11,10 +11,11 @@ import 'package:google_ml_kit/google_ml_kit.dart';
 class CameraScreen extends StatefulWidget {
   const CameraScreen({
     Key? key,
-    required this.camera,
+    required this.camera, required this.action,
   }) : super(key: key);
 
   final CameraDescription camera;
+  final int action;
 
   @override
   CameraScreenState createState() => CameraScreenState();
@@ -98,15 +99,27 @@ class CameraScreenState extends State<CameraScreen> {
                 faceDetected = faces[0];
                 Navigator.pop(context, [fileImage.path, faceDetected]);
               } else {
-                faceDetected = null;
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: Text('No face detected!'),
-                    );
-                  },
-                );
+                if (widget.action == 1) {
+                  faceDetected = null;
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text('No face detected!'),
+                      );
+                    },
+                  );
+                } else {
+                  faceDetected = null;
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text('ID not detected!'),
+                      );
+                    },
+                  );
+                }
               }
             }
 
