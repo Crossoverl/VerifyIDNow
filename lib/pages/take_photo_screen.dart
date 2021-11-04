@@ -180,7 +180,7 @@ class _TakePhotoState extends State<TakePhoto> {
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => CameraScreen(
-          camera: camera,
+          camera: camera, action: cameraDescription,
         ),
       ),
     );
