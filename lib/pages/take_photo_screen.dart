@@ -20,7 +20,6 @@ class _TakePhotoState extends State<TakePhoto> {
   Map data = {};
   String selfiePath = '';
   String idPath = '';
-  String verified = '';
   int tries = 0;
   late String imagePath;
   late Size? imageSize;
@@ -55,10 +54,14 @@ class _TakePhotoState extends State<TakePhoto> {
   _verifyImages() {
     final response = _faceNetService.predict();
 
+    setState(() {
+      tries = tries + 1;
+    });
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Verification(
-          result: verified,
+          result: response,
           tries: tries,
         ),
       ),
@@ -120,7 +123,6 @@ class _TakePhotoState extends State<TakePhoto> {
               color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
             ),
             SizedBox(height: 40.0),
-            Text(verified),
             FlatButton(
               onPressed: () {
                 setState(() {
