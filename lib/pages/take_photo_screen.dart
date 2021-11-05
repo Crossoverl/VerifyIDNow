@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/camera_screen.dart';
 import 'package:flutter_app1/pages/verification_screen.dart';
+import 'package:flutter_app1/pages/widgets/rounded_button_widget.dart';
 import 'package:flutter_app1/services/ml_kit_service.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
@@ -20,7 +21,7 @@ class _TakePhotoState extends State<TakePhoto> {
   Map data = {};
   String selfiePath = '';
   String idPath = '';
-  String verified = '';
+  int tries = 0;
   late String imagePath;
   late Size? imageSize;
 
@@ -54,15 +55,15 @@ class _TakePhotoState extends State<TakePhoto> {
   _verifyImages() {
     final response = _faceNetService.predict();
 
-    //TODO: remove, currently for testing
     setState(() {
-      verified = response;
+      tries = tries + 1;
     });
 
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Verification(
           result: response,
+          tries: tries,
         ),
       ),
     );
@@ -94,30 +95,26 @@ class _TakePhotoState extends State<TakePhoto> {
               children: [
                 Container(
                   margin: EdgeInsets.all(4.0),
-                  child: SizedBox(
-                    width: 150.0,
-                    child: TextButton.icon(
-                      onPressed: () async {openCamera(1);},
-                      icon: Icon(Icons.camera_alt, color: Colors.white,),
-                      label: Text('Take Selfie', style: TextStyle(color: Colors.white),),
-                      style: TextButton.styleFrom(backgroundColor: Colors.blue[400]),
-                    ),
-                  ),
+                  child: RoundedButton(
+                      text: 'TAKE SELFIE',
+                      color: 0xFF569EFD,
+                      textColor: 0xFFFFFFFF,
+                      onClicked: () {
+                        openCamera(1);
+                      }),
                 ),
                 SizedBox(
                   width: 12.0,
                 ),
                 Container(
                   margin: EdgeInsets.all(4.0),
-                  child: SizedBox(
-                    width: 150.0,
-                    child: TextButton.icon(
-                      onPressed: () async {openCamera(0);},
-                      icon: Icon(Icons.camera_alt, color: Colors.white,),
-                      label: Text('Take photo ID', style: TextStyle(color: Colors.white),),
-                      style: TextButton.styleFrom(backgroundColor: Colors.blue[400]),
-                    ),
-                  ),
+                  child: RoundedButton(
+                      text: 'TAKE ID PHOTO',
+                      color: 0xFF569EFD,
+                      textColor: 0xFFFFFFFF,
+                      onClicked: () {
+                        openCamera(0);
+                      }),
                 ),
               ],
             ),
@@ -131,13 +128,26 @@ class _TakePhotoState extends State<TakePhoto> {
               ],
             ),
             SizedBox(height: 40.0),
-            Text(verified),
+            FlatButton(
+              onPressed: (_isButtonDisabled)
+                  ? null
+                  : () {
+                      _verifyImages();
+                    },
+              child: Text("Verify"),
+              color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
+            ),
+            SizedBox(height: 40.0),
             FlatButton(
               onPressed: () {
+                setState(() {
+                  tries = tries + 1;
+                });
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Verification(
-                      result: 'test',
+                      result: "false",
+                      tries: tries,
                     ),
                   ),
                 );
@@ -202,6 +212,7 @@ class _TakePhotoState extends State<TakePhoto> {
       MaterialPageRoute(
         builder: (context) => CameraScreen(
           camera: camera,
+          action: cameraDescription,
         ),
       ),
     );
