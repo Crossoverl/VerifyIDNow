@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/camera_screen.dart';
 import 'package:flutter_app1/pages/verification_screen.dart';
 import 'package:flutter_app1/pages/widgets/rounded_button_widget.dart';
+import 'package:flutter_app1/pages/widgets/textform_button.dart';
 import 'package:flutter_app1/services/ml_kit_service.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
@@ -127,17 +128,7 @@ class _TakePhotoState extends State<TakePhoto> {
                 _displayImage(idPath),
               ],
             ),
-            SizedBox(height: 40.0),
-            FlatButton(
-              onPressed: (_isButtonDisabled)
-                  ? null
-                  : () {
-                      _verifyImages();
-                    },
-              child: Text("Verify"),
-              color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
-            ),
-            SizedBox(height: 40.0),
+            SizedBox(height: 80.0),
             FlatButton(
               onPressed: () {
                 setState(() {
@@ -160,13 +151,20 @@ class _TakePhotoState extends State<TakePhoto> {
               padding: const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: FlatButton(
-                  color: Colors.lightBlueAccent,
-                  disabledColor: Colors.grey[400],
-                  onPressed: _isButtonDisabled ? null : _verifyImages,
-                  child: Text(
-                    'Next',
-                    style: TextStyle(color: Colors.white),
+                child: SizedBox(
+                  width: 360.0,
+                  height: 64.0,
+                  child: DisabledButton(
+                      key: Key('identification'),
+                      isDisabled: _isButtonDisabled,
+                      child: RaisedButton (
+                        child: Text('Next', style: TextStyle(fontSize: 20.0),),
+                        onPressed: _verifyImages,
+                        textColor: Colors.white,
+                        color: Colors.blue,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                      )
                   ),
                 ),
               ),
