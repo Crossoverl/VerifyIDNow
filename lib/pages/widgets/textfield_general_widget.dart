@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../take_photo_screen.dart';
 import 'button_widget.dart';
 
 class TextfieldGeneralWidget extends StatefulWidget {
@@ -41,8 +42,9 @@ class _TextfieldGeneralWidgetState extends State<TextfieldGeneralWidget> {
             ButtonWidget(
               text: 'Submit',
               onClicked: () {
-                Navigator.of(context, rootNavigator: true)
-                    .pushNamed('/take_photo');
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => TakePhoto()),
+                );
                 print('Name: ${emailController.text}');
                 print('Company: ${companyController.text}');
                 print('Service: ${serviceController.text}');
