@@ -14,20 +14,16 @@ class RoundedButton extends StatelessWidget {
   }) : super();
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: 160.0,
-    height: 60.0,
-    child: RaisedButton(
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 16.0),
-        textAlign: TextAlign.center,
-      ),
-      shape: StadiumBorder(),
-      color: Color(color),
-      padding: EdgeInsets.only(top: 20.0, bottom: 20.0, right: 20.0, left: 20.0),
-      textColor: Color(textColor),
-      onPressed: onClicked,
+  Widget build(BuildContext context) => RaisedButton(
+    child: Text(
+      text,
+      style: TextStyle(fontSize: 16.0),
+      textAlign: TextAlign.center,
     ),
+    shape: StadiumBorder(),
+    color: Color(color),
+    padding: EdgeInsets.only(top: 16.0, bottom: 16.0, right: 12.0, left: 12.0),
+    textColor: Color(textColor),
+    onPressed: onClicked,
   );
 }

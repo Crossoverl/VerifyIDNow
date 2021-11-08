@@ -19,11 +19,9 @@ class TakePhoto extends StatefulWidget {
 }
 
 class _TakePhotoState extends State<TakePhoto> {
-  Map data = {};
   String selfiePath = '';
   String idPath = '';
   int tries = 0;
-  late String imagePath;
   late Size? imageSize;
 
   late CameraImage selfieImage;
@@ -31,9 +29,6 @@ class _TakePhotoState extends State<TakePhoto> {
 
   late CameraImage idImage;
   late Face idFace;
-
-  bool cameraInitializated = false;
-  bool pictureTaked = false;
 
   late bool _isButtonDisabled;
 
@@ -85,86 +80,97 @@ class _TakePhotoState extends State<TakePhoto> {
       ),
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.all(4.0),
-                  child: RoundedButton(
-                      text: 'TAKE SELFIE',
-                      color: 0xFF569EFD,
-                      textColor: 0xFFFFFFFF,
-                      onClicked: () {
-                        openCamera(1);
-                      }),
-                ),
-                SizedBox(
-                  width: 12.0,
-                ),
-                Container(
-                  margin: EdgeInsets.all(4.0),
-                  child: RoundedButton(
-                      text: 'TAKE ID PHOTO',
-                      color: 0xFF569EFD,
-                      textColor: 0xFFFFFFFF,
-                      onClicked: () {
-                        openCamera(0);
-                      }),
-                ),
-              ],
-            ),
-            SizedBox(height: 24.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _displayImage(selfiePath),
-                SizedBox(width: 12.0),
-                _displayImage(idPath),
-              ],
-            ),
-            SizedBox(height: 80.0),
-            FlatButton(
-              onPressed: () {
-                setState(() {
-                  tries = tries + 1;
-                });
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Verification(
-                      result: "false",
-                      tries: tries,
+            Expanded(
+              flex: 3,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    flex: 10,
+                    child: Container(
+                      margin: EdgeInsets.all(4.0),
+                      child: RoundedButton(
+                          text: 'TAKE SELFIE',
+                          color: 0xFF569EFD,
+                          textColor: 0xFFFFFFFF,
+                          onClicked: () {
+                            openCamera(1);
+                          }),
                     ),
                   ),
-                );
-              },
-              child: Text("Skip"),
-              color: Colors.lightBlueAccent,
+                  Spacer(flex: 1,),
+                  Expanded(
+                    flex: 10,
+                    child: Container(
+                      margin: EdgeInsets.all(4.0),
+                      child: RoundedButton(
+                          text: 'TAKE ID PHOTO',
+                          color: 0xFF569EFD,
+                          textColor: 0xFFFFFFFF,
+                          onClicked: () {
+                            openCamera(0);
+                          }),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(flex: 10, child: _displayImage(selfiePath)),
+                  Spacer(flex: 1,),
+                  Expanded(flex: 10, child: _displayImage(idPath)),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    tries = tries + 1;
+                  });
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Verification(
+                        result: "false",
+                        tries: tries,
+                      ),
+                    ),
+                  );
+                },
+                child: Text("Skip"),
+                color: Colors.lightBlueAccent,
+              ),
             ),
             Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: 360.0,
-                  height: 64.0,
-                  child: DisabledButton(
-                      key: Key('identification'),
-                      isDisabled: _isButtonDisabled,
-                      child: RaisedButton (
-                        child: Text('Next', style: TextStyle(fontSize: 20.0),),
-                        onPressed: _verifyImages,
-                        textColor: Colors.white,
-                        color: Colors.blue,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                      )
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox.expand(
+                    child: DisabledButton(
+                        key: Key('identification'),
+                        isDisabled: _isButtonDisabled,
+                        child: RaisedButton (
+                          child: Text('Next', style: TextStyle(fontSize: 20.0),),
+                          onPressed: _verifyImages,
+                          textColor: Colors.white,
+                          color: Colors.blue,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                        )
+                    ),
                   ),
                 ),
               ),
