@@ -2,6 +2,7 @@ import 'dart:io' as io;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app1/pages/camera_screen.dart';
 import 'package:flutter_app1/pages/verification_screen.dart';
 import 'package:flutter_app1/pages/widgets/rounded_button_widget.dart';
@@ -41,11 +42,25 @@ class _TakePhotoState extends State<TakePhoto> {
     super.initState();
     this._isButtonDisabled = true;
     _startUp();
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
+
 
   _startUp() async {
     await _faceNetService.loadModel();
     _mlKitService.initialize();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   _verifyImages() {
