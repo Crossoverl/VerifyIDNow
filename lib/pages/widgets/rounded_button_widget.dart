@@ -14,16 +14,20 @@ class RoundedButton extends StatelessWidget {
   }) : super();
 
   @override
-  Widget build(BuildContext context) => RaisedButton(
-    child: Text(
-      text,
-      style: TextStyle(fontSize: 16.0),
-      textAlign: TextAlign.center,
-    ),
-    shape: StadiumBorder(),
-    color: Color(color),
-    padding: EdgeInsets.only(top: 16.0, bottom: 16.0, right: 12.0, left: 12.0),
-    textColor: Color(textColor),
-    onPressed: onClicked,
-  );
+  Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+    return RaisedButton(
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 0.03 * deviceWidth),
+        textAlign: TextAlign.center,
+      ),
+      shape: StadiumBorder(),
+      color: Color(color),
+      padding: EdgeInsets.only(
+          top: 16.0, bottom: 16.0, right: 12.0, left: 12.0),
+      textColor: Color(textColor),
+      onPressed: onClicked,
+    );
+  }
 }
