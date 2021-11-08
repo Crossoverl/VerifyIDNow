@@ -82,6 +82,7 @@ class _TakePhotoState extends State<TakePhoto> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text('Identification'),
@@ -148,22 +149,27 @@ class _TakePhotoState extends State<TakePhoto> {
             ),
             Expanded(
               flex: 1,
-              child: FlatButton(
-                onPressed: () {
-                  setState(() {
-                    tries = tries + 1;
-                  });
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Verification(
-                        result: "false",
-                        tries: tries,
-                      ),
-                    ),
-                  );
-                },
-                child: Text("Skip"),
-                color: Colors.lightBlueAccent,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox.expand(
+                  child: FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        tries = tries + 1;
+                      });
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Verification(
+                            result: "false",
+                            tries: tries,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text("Skip", style: TextStyle(fontSize: .03 * deviceWidth),),
+                    color: Colors.lightBlueAccent,
+                  ),
+                ),
               ),
             ),
             Spacer(),
@@ -174,11 +180,12 @@ class _TakePhotoState extends State<TakePhoto> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox.expand(
+
                     child: DisabledButton(
                         key: Key('identification'),
                         isDisabled: _isButtonDisabled,
                         child: RaisedButton (
-                          child: Text('Next', style: TextStyle(fontSize: 20.0),),
+                          child: Text('Next', style: TextStyle(fontSize: .03 * deviceWidth),),
                           onPressed: _verifyImages,
                           textColor: Colors.white,
                           color: Colors.blue,
