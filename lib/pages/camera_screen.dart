@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app1/services/camera.service.dart';
 import 'package:flutter_app1/services/ml_kit_service.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
@@ -36,7 +37,10 @@ class CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,]);
     /// starts the camera
     _start();
   }
@@ -55,6 +59,7 @@ class CameraScreenState extends State<CameraScreen> {
   void dispose() {
     // Dispose of the controller when the widget is disposed.
     _cameraService.dispose();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
 
@@ -65,17 +70,20 @@ class CameraScreenState extends State<CameraScreen> {
       // You must wait until the controller is initialized before displaying the
       // camera preview. Use a FutureBuilder to display a loading spinner until the
       // controller has finished initializing.
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the Future is complete, display the preview.
-            return CameraPreview(_cameraService.cameraController);
-          } else {
-            // Otherwise, display a loading indicator.
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: Align(
+        alignment: Alignment.center,
+        child: FutureBuilder<void>(
+          future: _initializeControllerFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              // If the Future is complete, display the preview.
+              return CameraPreview(_cameraService.cameraController);
+            } else {
+              // Otherwise, display a loading indicator.
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         // Provide an onPressed callback.

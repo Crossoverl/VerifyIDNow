@@ -100,6 +100,7 @@ class _TakePhotoState extends State<TakePhoto> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
+
           children: [
             Expanded(
               flex: 3,
@@ -109,7 +110,7 @@ class _TakePhotoState extends State<TakePhoto> {
                   Expanded(
                     flex: 10,
                     child: Container(
-                      margin: EdgeInsets.all(4.0),
+                      margin: EdgeInsets.all(8.0),
                       child: RoundedButton(
                           text: 'TAKE SELFIE',
                           color: 0xFF569EFD,
@@ -123,7 +124,7 @@ class _TakePhotoState extends State<TakePhoto> {
                   Expanded(
                     flex: 10,
                     child: Container(
-                      margin: EdgeInsets.all(4.0),
+                      margin: EdgeInsets.all(8.0),
                       child: RoundedButton(
                           text: 'TAKE ID PHOTO',
                           color: 0xFF569EFD,
@@ -204,14 +205,17 @@ class _TakePhotoState extends State<TakePhoto> {
   }
 
   Widget _displayImage(String path) {
-    return Container(
-      height: 150,
-      width: 150,
-      margin: EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black12),
+    return SizedBox.expand(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Container(
+          margin: EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black12),
+          ),
+          child: _displayImageChild(path),
+        ),
       ),
-      child: _displayImageChild(path),
     );
   }
 
