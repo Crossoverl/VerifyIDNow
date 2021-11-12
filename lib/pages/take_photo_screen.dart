@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:camera/camera.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app1/pages/camera_screen.dart';
@@ -45,7 +46,6 @@ class _TakePhotoState extends State<TakePhoto> {
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
-
 
   _startUp() async {
     await _faceNetService.loadModel();
@@ -100,51 +100,17 @@ class _TakePhotoState extends State<TakePhoto> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
-
           children: [
             Expanded(
-              flex: 3,
+              flex: 9,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Expanded(
-                    flex: 10,
-                    child: Container(
-                      margin: EdgeInsets.all(8.0),
-                      child: RoundedButton(
-                          text: 'TAKE SELFIE',
-                          color: 0xFF569EFD,
-                          textColor: 0xFFFFFFFF,
-                          onClicked: () {
-                            openCamera(1);
-                          }),
-                    ),
+                  _displayImageAndButton(selfiePath, 'TAKE SELFIE', 1),
+                  Spacer(
+                    flex: 1,
                   ),
-                  Spacer(flex: 1,),
-                  Expanded(
-                    flex: 10,
-                    child: Container(
-                      margin: EdgeInsets.all(8.0),
-                      child: RoundedButton(
-                          text: 'TAKE ID PHOTO',
-                          color: 0xFF569EFD,
-                          textColor: 0xFFFFFFFF,
-                          onClicked: () {
-                            openCamera(0);
-                          }),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(flex: 10, child: _displayImage(selfiePath)),
-                  Spacer(flex: 1,),
-                  Expanded(flex: 10, child: _displayImage(idPath)),
+                  _displayImageAndButton(idPath, 'TAKE ID PHOTO', 0),
                 ],
               ),
             ),
@@ -167,13 +133,18 @@ class _TakePhotoState extends State<TakePhoto> {
                         ),
                       );
                     },
-                    child: Text("Skip", style: TextStyle(fontSize: .03 * deviceWidth),),
+                    child: Text(
+                      "Skip",
+                      style: TextStyle(fontSize: .03 * deviceWidth),
+                    ),
                     color: Colors.lightBlueAccent,
                   ),
                 ),
               ),
             ),
-            Spacer(),
+            Spacer(
+              flex: 3,
+            ),
             Expanded(
               flex: 1,
               child: Padding(
@@ -181,19 +152,20 @@ class _TakePhotoState extends State<TakePhoto> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox.expand(
-
                     child: DisabledButton(
                         key: Key('identification'),
                         isDisabled: _isButtonDisabled,
-                        child: RaisedButton (
-                          child: Text('Next', style: TextStyle(fontSize: .03 * deviceWidth),),
+                        child: RaisedButton(
+                          child: Text(
+                            'Next',
+                            style: TextStyle(fontSize: .03 * deviceWidth),
+                          ),
                           onPressed: _verifyImages,
                           textColor: Colors.white,
                           color: Colors.blue,
                           disabledColor: Colors.grey,
                           disabledTextColor: Colors.black,
-                        )
-                    ),
+                        )),
                   ),
                 ),
               ),
@@ -204,26 +176,62 @@ class _TakePhotoState extends State<TakePhoto> {
     );
   }
 
-  Widget _displayImage(String path) {
-    return SizedBox.expand(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Container(
-          margin: EdgeInsets.all(4.0),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black12),
+  Widget _displayImageAndButton(
+      String path, String buttonText, int cameraDescription) {
+    return Expanded(
+      flex: 6,
+      child: Container(
+        margin: EdgeInsets.all(12.0),
+        child: AspectRatio(
+          aspectRatio: 1 / 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              RoundedButton(
+                  text: buttonText,
+                  color: 0xFF569EFD,
+                  textColor: 0xFFFFFFFF,
+                  onClicked: () {
+                    openCamera(cameraDescription);
+                  }),
+              _displayImage(path),
+            ],
           ),
-          child: _displayImageChild(path),
         ),
+      ),
+    );
+  }
+
+  Widget _displayImage(String path) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+      child: Container(
+        alignment: Alignment.center,
+        child: AspectRatio(aspectRatio: 2 / 3, child: _displayImageChild(path)),
       ),
     );
   }
 
   Widget _displayImageChild(String path) {
     if (path == '') {
-      return Icon(Icons.image);
+      return DottedBorder(
+        borderType: BorderType.RRect,
+        radius: Radius.circular(12),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          child:
+              Container(alignment: Alignment.center, child: Icon(Icons.image)),
+        ),
+      );
     } else {
-      return Image.file(io.File(path));
+      return ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          child: Container(
+              child: Image.file(
+            io.File(path),
+            fit: BoxFit.cover,
+          )));
     }
   }
 
