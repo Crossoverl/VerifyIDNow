@@ -88,15 +88,11 @@ class CameraScreenState extends State<CameraScreen> {
           },
         ),
       ),
-      floatingActionButton: Container(
-        width: 100.0,
-        height: 100.0,
-        child: FloatingActionButton(
-          // Provide an onPressed callback.
-          onPressed: _takePicture,
-          shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4.0)),
-          backgroundColor: Colors.blueGrey.withOpacity(0),
-        ),
+      floatingActionButton: FloatingActionButton(
+        // Provide an onPressed callback.
+        onPressed: _takePicture,
+        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4.0)),
+        backgroundColor: Colors.blueGrey.withOpacity(0),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

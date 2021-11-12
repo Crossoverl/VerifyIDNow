@@ -1,4 +1,4 @@
-import 'dart:io' as io;
+import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -218,6 +218,7 @@ class _TakePhotoState extends State<TakePhoto> {
       return DottedBorder(
         borderType: BorderType.RRect,
         radius: Radius.circular(12),
+        color: Colors.grey,
         child: ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
           child:
@@ -229,7 +230,7 @@ class _TakePhotoState extends State<TakePhoto> {
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
           child: Container(
               child: Image.file(
-            io.File(path),
+            File(path),
             fit: BoxFit.cover,
           )));
     }
