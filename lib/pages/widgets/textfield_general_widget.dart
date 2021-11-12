@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/widgets/textform_button.dart';
+import 'dart:async';
 
 
 class TextfieldGeneralWidget extends StatefulWidget {
   @override
   _TextfieldGeneralWidgetState createState() => _TextfieldGeneralWidgetState();
-
 
 }
 
@@ -63,22 +63,64 @@ class _TextfieldGeneralWidgetState extends State<TextfieldGeneralWidget> {
             const SizedBox(height: 24),
             buildService(),
             const SizedBox(height: 24),
+            SizedBox(height: 10,),
             DisabledButton(
               key: Key('submitInfo'),
               isDisabled: _isButtonDisabled(),
               child: RaisedButton (
                 child: Text('Next'),
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamed('/take_photo');
+
+
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+
+                      Timer _timer = Timer(Duration(seconds: 3), () {
+                        Navigator.of(context).pop();
+                      });
+
+                      return SimpleDialog(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                        elevation: 16,
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 10,),
+                                  Text("Verifying appointment...",style: TextStyle(color: Colors.blueAccent),)
+                                ]
+                              )
+                            ),
+                          ]
+                      );
+                    },
+                  );
+
+                  //the timer and the delayed push to next to screen are meant to simulate
+                  //a connection to the database
+                  //when a real connection is made, you can remove these timers
+                  //and pop the dialog box based on the connection response
+                  Future.delayed(const Duration(milliseconds: 4000), () {
+                    setState(() {
+
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed('/take_photo');
+                    });
+                  });
+
                 },
                 textColor: Colors.white,
-                color: Colors.blue,
+                color: Color(0xFF1DDE7D),
                 disabledColor: Colors.grey,
                 disabledTextColor: Colors.black,
+                shape: StadiumBorder(),
+                padding: EdgeInsets.only(top: 20.0, bottom: 20.0, right: 45.0, left: 45.0),
+
               )
             ),
-
+            SizedBox(height: 20,),
             FlatButton(
               onPressed: () {
                 _printLatestValue();
@@ -87,6 +129,8 @@ class _TextfieldGeneralWidgetState extends State<TextfieldGeneralWidget> {
               },
               child: Text("Skip"),
               color: Colors.lightBlueAccent,
+              shape: StadiumBorder(),
+              padding: EdgeInsets.only(top: 20.0, bottom: 20.0, right: 45.0, left: 45.0),
             ),
           ],
         ),
