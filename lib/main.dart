@@ -8,7 +8,7 @@ import 'package:flutter_app1/pages/take_photo_screen.dart';
 
 main() {
   runApp(DevicePreview(
-    enabled: !kReleaseMode,
+    enabled: false,
     builder: (context) => MaterialApp(
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),

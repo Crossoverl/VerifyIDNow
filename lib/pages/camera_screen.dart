@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,8 @@ import 'package:google_ml_kit/google_ml_kit.dart';
 class CameraScreen extends StatefulWidget {
   const CameraScreen({
     Key? key,
-    required this.camera, required this.action,
+    required this.camera,
+    required this.action,
   }) : super(key: key);
 
   final CameraDescription camera;
@@ -38,9 +38,12 @@ class CameraScreenState extends State<CameraScreen> {
   void initState() {
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight,
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,]);
+      DeviceOrientation.portraitUp,
+    ]);
+
     /// starts the camera
     _start();
   }
@@ -85,77 +88,64 @@ class CameraScreenState extends State<CameraScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        // Provide an onPressed callback.
-        onPressed: () async {
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-
-            Face? faceDetected;
-
-            // Attempt to take a picture and get the file `fileImage`
-            // where it was saved.
-            XFile fileImage =
-                await _cameraService.takePicture();
-            final inputImage = InputImage.fromFilePath(fileImage.path);
-            List<Face>? faces =
-                await _mlKitService.getFacesFromImage(inputImage);
-
-            if (faces != null) {
-              if (faces.length > 0) {
-                faceDetected = faces[0];
-                Navigator.pop(context, [fileImage.path, faceDetected]);
-              } else {
-                if (widget.action == 1) {
-                  faceDetected = null;
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        content: Text('No face detected!'),
-                      );
-                    },
-                  );
-                } else {
-                  faceDetected = null;
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        content: Text('ID not detected!'),
-                      );
-                    },
-                  );
-                }
-              }
-            }
-
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
-        },
-        child: const Icon(Icons.camera_alt),
+      floatingActionButton: Container(
+        width: 100.0,
+        height: 100.0,
+        child: FloatingActionButton(
+          // Provide an onPressed callback.
+          onPressed: _takePicture,
+          shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4.0)),
+          backgroundColor: Colors.blueGrey.withOpacity(0),
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-}
 
-// A widget that displays the picture taken by the user.
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
+  _takePicture() async {
+    try {
+      // Ensure that the camera is initialized.
+      await _initializeControllerFuture;
 
-  const DisplayPictureScreen({Key? key, required this.imagePath})
-      : super(key: key);
+      Face? faceDetected;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Image.file(File(imagePath)),
-    );
+      // Attempt to take a picture and get the file `fileImage`
+      // where it was saved.
+      XFile fileImage = await _cameraService.takePicture();
+      final inputImage = InputImage.fromFilePath(fileImage.path);
+      List<Face>? faces = await _mlKitService.getFacesFromImage(inputImage);
+
+      if (faces != null) {
+        if (faces.length > 0) {
+          faceDetected = faces[0];
+          Navigator.pop(context, [fileImage.path, faceDetected]);
+        } else {
+          if (widget.action == 1) {
+            faceDetected = null;
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text('No face detected!'),
+                );
+              },
+            );
+          } else {
+            faceDetected = null;
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text('ID not detected!'),
+                );
+              },
+            );
+          }
+        }
+      }
+    } catch (e) {
+      // If an error occurs, log the error to the console.
+      print(e);
+    }
   }
 }
