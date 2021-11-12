@@ -1,6 +1,4 @@
-import 'package:camera/camera.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
-import 'package:flutter/material.dart';
 
 import 'camera.service.dart';
 
@@ -11,6 +9,7 @@ class MLKitService {
   factory MLKitService() {
     return _cameraServiceService;
   }
+
   // singleton boilerplate
   MLKitService._internal();
 
@@ -18,6 +17,7 @@ class MLKitService {
   CameraService _cameraService = CameraService();
 
   late FaceDetector _faceDetector;
+
   FaceDetector get faceDetector => this._faceDetector;
 
   void initialize() {
@@ -29,7 +29,6 @@ class MLKitService {
   }
 
   Future<List<Face>>? getFacesFromImage(InputImage image) async {
-
     /// preprocess the image  🧑🏻‍🔧
 
     // InputImageFormat? inputImageFormat = InputImageFormatMethods.fromRawValue(image.format.raw);
@@ -58,8 +57,7 @@ class MLKitService {
     // );
 
     /// proces the image and makes inference 🤖
-    List<Face> faces =
-    await this._faceDetector.processImage(image);
+    List<Face> faces = await this._faceDetector.processImage(image);
     return faces;
   }
 }
