@@ -38,12 +38,6 @@ class CameraScreenState extends State<CameraScreen> {
   void initState() {
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-    ]);
-
     /// starts the camera
     _start();
   }
@@ -62,7 +56,6 @@ class CameraScreenState extends State<CameraScreen> {
   void dispose() {
     // Dispose of the controller when the widget is disposed.
     _cameraService.dispose();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
 

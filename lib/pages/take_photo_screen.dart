@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app1/pages/camera_screen.dart';
@@ -40,11 +41,11 @@ class _TakePhotoState extends State<TakePhoto> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.initState();
     this._isButtonDisabled = true;
     _startUp();
     WidgetsFlutterBinding.ensureInitialized();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   _startUp() async {
@@ -54,12 +55,6 @@ class _TakePhotoState extends State<TakePhoto> {
 
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     super.dispose();
   }
 
@@ -118,28 +113,7 @@ class _TakePhotoState extends State<TakePhoto> {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SizedBox.expand(
-                  child: FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        tries = tries + 1;
-                      });
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Verification(
-                            result: "false",
-                            tries: tries,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Skip",
-                      style: TextStyle(fontSize: .03 * deviceWidth),
-                    ),
-                    color: Colors.lightBlueAccent,
-                  ),
-                ),
+                child: _skipText(),
               ),
             ),
             Spacer(
@@ -289,5 +263,36 @@ class _TakePhotoState extends State<TakePhoto> {
         }
       });
     }
+  }
+
+  Widget _skipText() {
+    TextStyle linkStyle = TextStyle(color: Colors.blue, decoration: TextDecoration.underline,);
+    return Align(
+      alignment: Alignment.center,
+      child: RichText(
+        text: TextSpan(
+          style: linkStyle,
+          children: <TextSpan>[
+            TextSpan(
+                text: 'skip',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    setState(() {
+                      tries = tries + 1;
+                    });
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Verification(
+                          result: "false",
+                          tries: tries,
+                        ),
+                      ),
+                    );
+                  }),
+          ],
+        ),
+      ),
+    );
   }
 }
