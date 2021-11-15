@@ -35,16 +35,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     );
   }
 
-  Widget _buildFullscrenImage() {
-    return Image.asset(
-      'assets/fullscreen.jpg',
-      fit: BoxFit.cover,
-      height: double.infinity,
-      width: double.infinity,
-      alignment: Alignment.center,
-    );
-  }
-
   Widget _buildImage(String assetName, [double width = 350]) {
     return Image.asset('$assetName', width: width);
   }
@@ -72,33 +62,33 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           title: "Information",
           body:
               "Let us know who you are. Provide your name, your employeer company and the service you will be providing.",
-          image: _buildImage('assets/images/1.jpg'),
+          image: _buildImage('assets/images/logo.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Face ID",
           body: "Take a selfie to let us know that it is really you.",
-          image: _buildImage('assets/images/2.jpg'),
+          image: _buildImage('assets/images/logo.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "ID",
           body: "Provide a picture of your ID by taking a picture of.",
-          image: _buildImage('assets/images/3.jpg'),
+          image: _buildImage('assets/images/logo.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Confirm",
           body:
-              "Once you have been verified a message will be sent to your client to let them know.",
-          image: _buildImage('assets/images/4.jpg'),
+              "Once you have taken the pictures of both yourself and your ID you can confirm that they are of good quality or retake them again.",
+          image: _buildImage('assets/images/logo.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Verified",
           body:
               "Once you have been verified a message will be sent to your client to let them know.",
-          image: _buildImage('assets/images/5.jpg'),
+          image: _buildImage('assets/images/logo.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
