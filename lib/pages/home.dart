@@ -15,13 +15,6 @@ class Home extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              child:
-                Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child:
-                    Image.asset('assets/logo/Verify_logo.png')),
-            ),
             Text('Home'),
             SizedBox(
               height: 100.0,
