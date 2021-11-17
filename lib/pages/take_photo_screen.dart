@@ -1,9 +1,14 @@
-import 'dart:io' as io;
+import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app1/pages/camera_screen.dart';
 import 'package:flutter_app1/pages/verification_screen.dart';
+import 'package:flutter_app1/pages/widgets/rounded_button_widget.dart';
+import 'package:flutter_app1/pages/widgets/textform_button.dart';
 import 'package:flutter_app1/services/ml_kit_service.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
@@ -17,11 +22,9 @@ class TakePhoto extends StatefulWidget {
 }
 
 class _TakePhotoState extends State<TakePhoto> {
-  Map data = {};
   String selfiePath = '';
   String idPath = '';
-  String verified = '';
-  late String imagePath;
+  int tries = 0;
   late Size? imageSize;
 
   late CameraImage selfieImage;
@@ -29,9 +32,6 @@ class _TakePhotoState extends State<TakePhoto> {
 
   late CameraImage idImage;
   late Face idFace;
-
-  bool cameraInitializated = false;
-  bool pictureTaked = false;
 
   late bool _isButtonDisabled;
 
@@ -41,9 +41,11 @@ class _TakePhotoState extends State<TakePhoto> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.initState();
     this._isButtonDisabled = true;
     _startUp();
+    WidgetsFlutterBinding.ensureInitialized();
   }
 
   _startUp() async {
@@ -51,18 +53,23 @@ class _TakePhotoState extends State<TakePhoto> {
     _mlKitService.initialize();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   _verifyImages() {
     final response = _faceNetService.predict();
 
-    //TODO: remove, currently for testing
     setState(() {
-      verified = response;
+      tries = tries + 1;
     });
 
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Verification(
           result: response,
+          tries: tries,
         ),
       ),
     );
@@ -70,9 +77,10 @@ class _TakePhotoState extends State<TakePhoto> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Take photos'),
+        title: Text('Identification'),
         backgroundColor: Colors.lightBlue,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios, color: Colors.grey),
@@ -83,56 +91,58 @@ class _TakePhotoState extends State<TakePhoto> {
       ),
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                FlatButton.icon(
-                    onPressed: () async {
-                      openCamera(1);
-                    },
-                    icon: Icon(Icons.camera_alt),
-                    label: Text('Take Selfie')),
-                SizedBox(
-                  width: 24.0,
-                ),
-                FlatButton.icon(
-                    onPressed: () async {
-                      openCamera(0);
-                    },
-                    icon: Icon(Icons.camera_alt),
-                    label: Text('Take photo ID')),
-              ],
-            ),
-            SizedBox(height: 4.0),
-            Row(
-              children: [
-                _displayImage(selfiePath),
-                SizedBox(width: 12.0),
-                _displayImage(idPath),
-              ],
-            ),
-            SizedBox(height: 40.0),
-            FlatButton(
-              onPressed: _isButtonDisabled ? null : _verifyImages,
-              child: Text("Verify"),
-              color: _isButtonDisabled ? Colors.grey : Colors.lightBlueAccent,
-            ),
-            SizedBox(height: 40.0),
-            Text(verified),
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Verification(
-                      result: 'test',
-                    ),
+            Expanded(
+              flex: 9,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _displayImageAndButton(selfiePath, 'TAKE SELFIE', 1),
+                  Spacer(
+                    flex: 1,
                   ),
-                );
-              },
-              child: Text("Skip"),
-              color: Colors.lightBlueAccent,
+                  _displayImageAndButton(idPath, 'TAKE ID PHOTO', 0),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _skipText(),
+              ),
+            ),
+            Spacer(
+              flex: 3,
+            ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox.expand(
+                    child: DisabledButton(
+                        key: Key('identification'),
+                        isDisabled: _isButtonDisabled,
+                        child: RaisedButton(
+                          child: Text(
+                            'Next',
+                            style: TextStyle(fontSize: .03 * deviceWidth),
+                          ),
+                          onPressed: _verifyImages,
+                          textColor: Colors.white,
+                          color: Colors.blue,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                        )),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -140,23 +150,63 @@ class _TakePhotoState extends State<TakePhoto> {
     );
   }
 
-  Widget _displayImage(String path) {
-    return Container(
-      height: 150,
-      width: 150,
-      margin: EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black12),
+  Widget _displayImageAndButton(
+      String path, String buttonText, int cameraDescription) {
+    return Expanded(
+      flex: 6,
+      child: Container(
+        margin: EdgeInsets.all(12.0),
+        child: AspectRatio(
+          aspectRatio: 1 / 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              RoundedButton(
+                  text: buttonText,
+                  color: 0xFF569EFD,
+                  textColor: 0xFFFFFFFF,
+                  onClicked: () {
+                    openCamera(cameraDescription);
+                  }),
+              _displayImage(path),
+            ],
+          ),
+        ),
       ),
-      child: _displayImageChild(path),
+    );
+  }
+
+  Widget _displayImage(String path) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 12.0),
+      child: Container(
+        alignment: Alignment.center,
+        child: AspectRatio(aspectRatio: 2 / 3, child: _displayImageChild(path)),
+      ),
     );
   }
 
   Widget _displayImageChild(String path) {
     if (path == '') {
-      return Icon(Icons.image);
+      return DottedBorder(
+        borderType: BorderType.RRect,
+        radius: Radius.circular(12),
+        color: Colors.grey,
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          child:
+              Container(alignment: Alignment.center, child: Icon(Icons.image)),
+        ),
+      );
     } else {
-      return Image.file(io.File(path));
+      return ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          child: Container(
+              child: Image.file(
+            File(path),
+            fit: BoxFit.cover,
+          )));
     }
   }
 
@@ -175,6 +225,7 @@ class _TakePhotoState extends State<TakePhoto> {
       MaterialPageRoute(
         builder: (context) => CameraScreen(
           camera: camera,
+          action: cameraDescription,
         ),
       ),
     );
@@ -212,5 +263,36 @@ class _TakePhotoState extends State<TakePhoto> {
         }
       });
     }
+  }
+
+  Widget _skipText() {
+    TextStyle linkStyle = TextStyle(color: Colors.blue, decoration: TextDecoration.underline,);
+    return Align(
+      alignment: Alignment.center,
+      child: RichText(
+        text: TextSpan(
+          style: linkStyle,
+          children: <TextSpan>[
+            TextSpan(
+                text: 'skip',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    setState(() {
+                      tries = tries + 1;
+                    });
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Verification(
+                          result: "false",
+                          tries: tries,
+                        ),
+                      ),
+                    );
+                  }),
+          ],
+        ),
+      ),
+    );
   }
 }
