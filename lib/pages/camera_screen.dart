@@ -83,6 +83,7 @@ class CameraScreenState extends State<CameraScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         // Provide an onPressed callback.
+
         onPressed: _takePicture,
         shape: CircleBorder(side: BorderSide(color: Colors.white, width: 4.0)),
         backgroundColor: Colors.blueGrey.withOpacity(0),

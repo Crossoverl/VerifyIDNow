@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/widgets/textform_button.dart';
 import 'dart:async';
 
-
 class TextfieldGeneralWidget extends StatefulWidget {
   @override
   _TextfieldGeneralWidgetState createState() => _TextfieldGeneralWidgetState();
@@ -63,6 +62,7 @@ class _TextfieldGeneralWidgetState extends State<TextfieldGeneralWidget> {
             const SizedBox(height: 24),
             buildService(),
             const SizedBox(height: 24),
+
             SizedBox(height: 10,),
             DisabledButton(
               key: Key('submitInfo'),
