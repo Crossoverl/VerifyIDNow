@@ -52,7 +52,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/mobilefacenet.tflite
-#     - assets/images/self.jpg
+    - assets/logo/Verify_logo.png
+  #     - assets/images/self.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

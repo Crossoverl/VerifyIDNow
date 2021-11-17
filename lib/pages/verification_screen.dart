@@ -35,7 +35,7 @@ class Verification extends StatelessWidget {
                     )
                 ),
               Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(50.0),
                 child:
                   Text(
                   'The customer has been notified of your arrival.',
@@ -81,7 +81,7 @@ class Verification extends StatelessWidget {
                   Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: 5.0),
+                        padding: EdgeInsets.only(bottom: 45.0),
                         child:
                           Text('Number of attempts left: ' +  (4-tries).toString(),
                               style: TextStyle(
