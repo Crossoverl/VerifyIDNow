@@ -61,7 +61,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Information",
           body:
-              "Let us know who you are. Provide your name, your employeer company and the service you will be providing.",
+              "Let us know who you are. Provide your name, your employer company and the service you will be providing.",
           image: _buildImage('assets/images/logo.png'),
           decoration: pageDecoration,
         ),
@@ -73,7 +73,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           title: "ID",
-          body: "Provide a picture of your ID by taking a picture of.",
+          body: "Take a picture of your driver's license.",
           image: _buildImage('assets/images/logo.png'),
           decoration: pageDecoration,
         ),
