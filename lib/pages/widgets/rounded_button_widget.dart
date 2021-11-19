@@ -24,8 +24,8 @@ class RoundedButton extends StatelessWidget {
       ),
       shape: StadiumBorder(),
       color: Color(color),
-      padding: EdgeInsets.only(
-          top: 16.0, bottom: 16.0, right: 12.0, left: 12.0),
+      padding:
+          EdgeInsets.only(top: 10.0, bottom: 10.0, right: 45.0, left: 45.0),
       textColor: Color(textColor),
       onPressed: onClicked,
     );
