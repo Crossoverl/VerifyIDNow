@@ -35,7 +35,7 @@ class Verification extends StatelessWidget {
                     )
                 ),
               Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(45.0),
                 child:
                   Text(
                   'The customer has been notified of your arrival.',
@@ -81,7 +81,7 @@ class Verification extends StatelessWidget {
                   Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: 5.0),
+                        padding: EdgeInsets.only(bottom: 45.0),
                         child:
                           Text('Number of attempts left: ' +  (4-tries).toString(),
                               style: TextStyle(
@@ -113,7 +113,7 @@ class Verification extends StatelessWidget {
               RoundedButton(text: 'RETURN HOME', color: 0xFF1DDE7D, onClicked: () {
               int count = 0;
               Navigator.of(context).popUntil((route) {
-                return count++ == 3;
+                return count++ == 2;
                 });
               },
               )
