@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/pages/widgets/rounded_button_widget.dart';
+
 class Verification extends StatelessWidget {
-  const Verification({Key? key, required this.result, required this.tries}) : super(key: key);
+  const Verification({Key? key, required this.result, required this.tries})
+      : super(key: key);
   final String result;
   final int tries;
   final int triesAllowed = 3;
@@ -20,104 +22,91 @@ class Verification extends StatelessWidget {
           children: [
             if (result == "true" && tries < 3) ...[
               Center(
-                  child:
-                  Padding(
+                  child: Padding(
                       padding: EdgeInsets.all(10.0),
-                      child:
-                      Text(
-                          'Your identity has been verified!',
+                      child: Text('Your identity has been verified!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: CupertinoColors.activeBlue,
-                              fontSize: 35)
-                      )
-                  )
-              ),
+                              fontSize: 35)))),
               Padding(
                   padding: EdgeInsets.all(45.0),
-                  child:
-                  Text(
-                      'The customer has been notified of your arrival.',
+                  child: Text('The customer has been notified of your arrival.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: CupertinoColors.black,
-                          fontSize: 20)
-                  )
+                          fontSize: 20))),
+              RoundedButton(
+                text: 'RETURN HOME',
+                color: 0xFF1DDE7D,
+                onClicked: () {
+                  int count = 0;
+                  Navigator.of(context).popUntil((route) {
+                    return count++ == 3;
+                  });
+                },
               ),
-              RoundedButton(text: 'RETURN HOME', color: 0xFF1DDE7D, onClicked: () {
-                int count = 0;
-                Navigator.of(context).popUntil((route) {
-                  return count++ == 3;
-                });
-              },
-              ),
-            ]
-            else if (result == "false" && tries <= 3)...[
+            ] else if (result == "false" && tries <= 3) ...[
               Padding(
                   padding: EdgeInsets.all(10.0),
-                  child:
-                  Text('We were unable to verify your identity.',
+                  child: Text('We were unable to verify your identity.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: CupertinoColors.black,
-                          fontSize: 35
-                      )
-                  )),
+                          fontSize: 35))),
               Padding(
                 padding: EdgeInsets.all(15.0),
-                child:
-                Text(
-                    'Please try again.',
+                child: Text('Please try again.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         color: CupertinoColors.black,
-                        fontSize: 20)
-                ),
+                        fontSize: 20)),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
-                child:
-                Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 45.0),
-                        child:
-                        Text('Number of attempts left: ' +  (4-tries).toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: CupertinoColors.systemRed,
-                                fontSize: 20)
-                        ),
-                      ),
-                      RoundedButton(text: 'RETRY', color: 0xFF1DDE7D, onClicked: () {
+                child: Column(children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 45.0),
+                    child: Text(
+                        'Number of attempts left: ' + (4 - tries).toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: CupertinoColors.systemRed,
+                            fontSize: 20)),
+                  ),
+                  RoundedButton(
+                      text: 'RETRY',
+                      color: 0xFF1DDE7D,
+                      onClicked: () {
                         int count = 0;
                         Navigator.of(context).pop();
-                      }
-                      )
-                    ]
-                ),
+                      })
+                ]),
               ),
-            ]
-            else ...[
-                Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child:
-                    Text('We were unable to verify your identity.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold,
-                            color: CupertinoColors.black,
-                            fontSize: 35
-                        )
-                    )),
-                RoundedButton(text: 'RETURN HOME', color: 0xFF1DDE7D, onClicked: () {
+            ] else ...[
+              Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text('We were unable to verify your identity.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CupertinoColors.black,
+                          fontSize: 35))),
+              RoundedButton(
+                text: 'RETURN HOME',
+                color: 0xFF1DDE7D,
+                onClicked: () {
                   int count = 0;
                   Navigator.of(context).popUntil((route) {
                     return count++ == 2;
                   });
                 },
-                )
-              ],
+              )
+            ],
 
             // Text(tries.toString()),
             SizedBox(
