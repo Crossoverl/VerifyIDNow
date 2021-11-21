@@ -102,9 +102,6 @@ class _TakePhotoState extends State<TakePhoto> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _displayImageAndButton(selfiePath, 'TAKE SELFIE', 1),
-                  Spacer(
-                    flex: 1,
-                  ),
                   _displayImageAndButton(idPath, 'TAKE ID PHOTO', 0),
                 ],
               ),
