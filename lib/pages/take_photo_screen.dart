@@ -41,7 +41,6 @@ class _TakePhotoState extends State<TakePhoto> {
 
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.initState();
     this._isButtonDisabled = true;
     _startUp();
