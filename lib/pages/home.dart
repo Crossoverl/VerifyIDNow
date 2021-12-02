@@ -29,6 +29,11 @@ class OnBoardingPage extends StatefulWidget {
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
+  @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+
   void _loadInfoPage(context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => Info()),

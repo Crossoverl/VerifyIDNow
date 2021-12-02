@@ -41,7 +41,6 @@ class _TakePhotoState extends State<TakePhoto> {
 
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.initState();
     this._isButtonDisabled = true;
     _startUp();
@@ -101,10 +100,7 @@ class _TakePhotoState extends State<TakePhoto> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _displayImageAndButton(selfiePath, 'TAKE SELFIE', 1),
-                  Spacer(
-                    flex: 1,
-                  ),
+                  _displayImageAndButton(selfiePath, 'TAKE \nSELFIE', 1),
                   _displayImageAndButton(idPath, 'TAKE ID PHOTO', 0),
                 ],
               ),
