@@ -2,21 +2,18 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:camera/camera.dart';
-import 'package:image/image.dart' as imglib;
 import 'package:google_ml_kit/google_ml_kit.dart';
-
-import 'image_converter.dart';
+import 'package:image/image.dart' as imglib;
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 class FaceNetService {
-
   // singleton boilerplate
   static final FaceNetService _faceNetService = FaceNetService._internal();
 
   factory FaceNetService() {
     return _faceNetService;
   }
+
   // singleton boilerplate
   FaceNetService._internal();
 
@@ -24,8 +21,8 @@ class FaceNetService {
 
   double threshold = 1.0;
 
-  late List _predictedData; //use as selfie data
-  List get predictedData => this._predictedData;
+  late List _selfData; //use as selfie data
+  List get predictedData => this._selfData;
 
   late List _idData; //use as selfie data
   List get idData => this._idData;
@@ -36,12 +33,12 @@ class FaceNetService {
       if (Platform.isAndroid) {
         delegate = GpuDelegateV2(
             options: GpuDelegateOptionsV2(
-              false,
-              TfLiteGpuInferenceUsage.fastSingleAnswer,
-              TfLiteGpuInferencePriority.minLatency,
-              TfLiteGpuInferencePriority.auto,
-              TfLiteGpuInferencePriority.auto,
-            ));
+          false,
+          TfLiteGpuInferenceUsage.fastSingleAnswer,
+          TfLiteGpuInferencePriority.minLatency,
+          TfLiteGpuInferencePriority.auto,
+          TfLiteGpuInferencePriority.auto,
+        ));
       } else if (Platform.isIOS) {
         delegate = GpuDelegate(
           options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
@@ -58,10 +55,7 @@ class FaceNetService {
     }
   }
 
-
-  // use for selfie
   setSelfieData(String imagePath, Face? face) async {
-
     if (face == null) {
       print('failed to process image');
       return;
@@ -83,12 +77,10 @@ class FaceNetService {
     this._interpreter.run(input, output);
     output = output.reshape([192]);
 
-    this._predictedData = List.from(output);
+    this._selfData = List.from(output);
   }
 
-  // id
   setidData(String imagePath, Face? face) async {
-
     if (face == null) {
       print('failed to process image');
       return;
@@ -115,14 +107,17 @@ class FaceNetService {
 
   /// takes the predicted data previously saved and do inference
   String predict() {
-    /// search closer user prediction if exists
-    return _searchResult(this._predictedData, this._idData);
+    double distance = _euclideanDistance(this._idData, this._selfData);
+    if (distance <= threshold) {
+      return "true";
+    }
+    return "false";
   }
 
   /// _preProess: crops the image to be more easy
   /// to detect and transforms it to model input.
-  /// [cameraImage]: current image
-  /// [face]: face detected
+  /// [imagePath]: image path
+  /// [face]: face detected from imagePath
   Future<List?> _preProcess(String imagePath, Face faceDetected) async {
     // crops the face 💇
     imglib.Image? croppedImage = await _cropFace(imagePath, faceDetected);
@@ -158,17 +153,6 @@ class FaceNetService {
         convertedImage, x.round(), y.round(), w.round(), h.round());
   }
 
-  /// converts ___CameraImage___ type to ___Image___ type
-  /// [image]: image to be converted
-  imglib.Image? _convertCameraImage(CameraImage image) {
-    var img = convertToImage(image);
-    if (img == null) {
-      return null;
-    }
-    var img1 = imglib.copyRotate(img, -90);
-    return img1;
-  }
-
   Float32List imageToByteListFloat32(imglib.Image image) {
     /// input size = 112
     var convertedBytes = Float32List(1 * 112 * 112 * 3);
@@ -189,22 +173,6 @@ class FaceNetService {
     return convertedBytes.buffer.asFloat32List();
   }
 
-  /// searchs the result in the DDBB (this function should be performed by Backend)
-  /// [predictedData]: Array that represents the face by the MobileFaceNet model
-  String _searchResult(List predictedData, List idData) {
-
-    /// if no faces saved
-
-    double currDist = 0.0;
-
-    /// search the closest result 👓
-    currDist = _euclideanDistance(idData, predictedData);
-    if (currDist <= threshold) {
-      return "true";
-    }
-    return "false";
-  }
-
   /// Adds the power of the difference between each point
   /// then computes the sqrt of the result 📐
   double _euclideanDistance(List e1, List e2) {
@@ -215,9 +183,5 @@ class FaceNetService {
       sum += pow((e1[i] - e2[i]), 2);
     }
     return sqrt(sum);
-  }
-
-  void setPredictedData(value) {
-    this._predictedData = value;
   }
 }
