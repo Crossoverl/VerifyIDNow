@@ -25,15 +25,6 @@ import 'package:flutter/cupertino.dart';
 
 
 void main() {
-  // testWidgets('Check rendering of identity confirmation page - 6', (WidgetTester tester) async {
-  //   Widget testWidget = new MediaQuery(
-  //       data: new MediaQueryData(),
-  //       child: new MaterialApp(home: new _MainPageState())
-  //   );
-  //   await tester.pumpWidget(testWidget);
-  //   // await tester.tap(find.byType(RoundedButton).at(0));
-  //   // await tester.pumpWidget(testWidget);
-  // });
 
 
   testWidgets('Verify Appt Information Input - 1', (WidgetTester tester) async {
@@ -55,8 +46,6 @@ void main() {
         await tester.pumpWidget(testWidget);
         await tester.pumpWidget(testWidget);
         expect((tester.widget(find.byType(DisabledButton).at(0)) as DisabledButton).isDisabled, true);
-        // print(find.byType(TextField).at(0));
-        // print(find.byType(TextField).at(1));
   });
 
   testWidgets('App Render - 3', (WidgetTester tester) async {
@@ -67,15 +56,6 @@ void main() {
     await tester.pumpWidget(testWidget);
     expect((tester.widget(find.byType(IntroductionScreen).at(0)) as IntroductionScreen).globalBackgroundColor, Colors.white);
   });
-
-  // testWidgets('Check rendering of identity confirmation page - 6', (WidgetTester tester) async {
-  //     Widget testWidget = new MediaQuery(
-  //         data: new MediaQueryData(),
-  //         child: new MaterialApp(home: new TakePhoto()));
-  //     await tester.pumpWidget(testWidget);
-  //     // expect((tester.widget(find.byType(AppBar).at(0)) as AppBar).title, 'Identification');
-  // });
-
 
   testWidgets('Check verification not possible page - 7', (WidgetTester tester) async {
     Widget testWidget = new MediaQuery(
@@ -88,10 +68,6 @@ void main() {
 
     await tester.tap(find.byType(RoundedButton).at(0));
     await tester.pumpAndSettle();
-
-    // await tester.pumpWidget(testWidget);
-    // expect((tester.widget(find.byType(Text).at(0)) as Text).data, "Identification");
-    // expect((tester.widget(find.byType(TakePhoto)).at(0).));
   });
 
   testWidgets('Check verification not possible page | result: true, tries: 1 - 7a', (WidgetTester tester) async {
@@ -128,17 +104,6 @@ void main() {
     );
     expect(find.text('test'), findsOneWidget);
   });
-
-  //
-  // testWidgets('Check rendering of the Textfield_general_widget - 12', (WidgetTester tester) async {
-  //   Widget testWidget = new MediaQuery(
-  //       data: new MediaQueryData(),
-  //       child: new MaterialApp(home: new TextfieldGeneralWidget())
-  //   );
-  //   await tester.pumpWidget(
-  //       testWidget
-  //   );
-  // });
 
   testWidgets('Check correct rendering of verification_screen.dart - 13', (WidgetTester tester) async {
     Widget testWidget = new MediaQuery(
