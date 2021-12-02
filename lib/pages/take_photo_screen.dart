@@ -100,7 +100,7 @@ class _TakePhotoState extends State<TakePhoto> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _displayImageAndButton(selfiePath, 'TAKE SELFIE', 1),
+                  _displayImageAndButton(selfiePath, 'TAKE \nSELFIE', 1),
                   _displayImageAndButton(idPath, 'TAKE ID PHOTO', 0),
                 ],
               ),
