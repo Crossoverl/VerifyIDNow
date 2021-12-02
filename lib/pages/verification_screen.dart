@@ -44,7 +44,7 @@ class Verification extends StatelessWidget {
                 onClicked: () {
                   int count = 0;
                   Navigator.of(context).popUntil((route) {
-                    return count++ == 3;
+                    return count++ == 2;
                   });
                 },
               ),
