@@ -12,15 +12,21 @@ For the Android SDK, you must install Android Studio. Android Studio comes packa
 
 Clone the project:
 
-```git clone https://github.com/Crossoverl/VerifyIDNow.git```
+```
+git clone https://github.com/Crossoverl/VerifyIDNow.git
+```
 
 Open the folder:
 
-```cd VerifyIDNow```
+```
+cd VerifyIDNow
+```
 
 Install dependencies:
 
-```flutter pub get```
+```
+flutter pub get
+```
 
 Once everything has been installed and configured, the project can be opened in either Android Studio or IntelliJ IDEA. Create a Flutter run configuration in your IDE of choice that points to the main.dart file in the project/lib directory, and run the project.
 
