@@ -11,9 +11,9 @@ main() {
     initialRoute: '/splash',
     routes: {
       '/splash': (context) => SplashScreen(),
-      '/home': (context) => Home(),
+      '/home': (context) => OnBoardingPage(),
       '/loading': (context) => Loading(),
-      '/info': (context) => Info(),
+      '/info': (context) => InfoPage(),
       '/take_photo': (context) => TakePhoto(),
     },
   ));

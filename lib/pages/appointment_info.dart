@@ -9,37 +9,20 @@ Future main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(Info());
+  runApp(InfoPage());
 }
 
-class Info extends StatelessWidget {
-  const Info({Key? key}) : super(key: key);
-  static final String title = 'Information';
+class InfoPage extends StatefulWidget {
+  final String title = 'Information';
+
+  const InfoPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: title,
-        theme: ThemeData(
-          primaryColor: Colors.black,
-        ),
-        home: MainPage(title: title),
-      );
+  _InfoPageState createState() => _InfoPageState();
 }
 
-class MainPage extends StatefulWidget {
-  final String title;
-
-  const MainPage({
-    required this.title,
-  });
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  int index = 0;
+class _InfoPageState extends State<InfoPage> {
+  // int index = 0;
 
   @override
   Widget build(BuildContext context) => Scaffold(

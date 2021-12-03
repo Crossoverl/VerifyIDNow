@@ -112,17 +112,6 @@ class Verification extends StatelessWidget {
             SizedBox(
               height: 100.0,
             ),
-
-            // FlatButton(
-            //   onPressed: () {
-            //     int count = 0;
-            //     Navigator.of(context).popUntil((route) {
-            //       return count++ == 3;
-            //     });
-            //   },
-            //   child: Text('RETURN HOME'),
-            //   color: Color(0xFF1DDE7D),
-            // )
           ],
         ),
       ),
