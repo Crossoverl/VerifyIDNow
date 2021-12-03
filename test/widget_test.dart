@@ -25,8 +25,6 @@ import 'package:flutter/cupertino.dart';
 
 
 void main() {
-
-
   testWidgets('Verify Appt Information Input - 1', (WidgetTester tester) async {
     Widget testWidget = new MediaQuery(
         data: new MediaQueryData(),
