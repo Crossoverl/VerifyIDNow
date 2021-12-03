@@ -30,7 +30,7 @@ void main() {
   testWidgets('Verify Appt Information Input - 1', (WidgetTester tester) async {
     Widget testWidget = new MediaQuery(
         data: new MediaQueryData(),
-        child: new MaterialApp(home: new Info()));
+        child: new MaterialApp(home: new InfoPage()));
     await tester.pumpWidget(testWidget);
     await tester.enterText(find.byType(TextField).at(0), 'John Doe');
     await tester.enterText(find.byType(TextField).at(1), 'ABC Electric');
@@ -42,7 +42,7 @@ void main() {
   testWidgets('Empty Appt Information - 2', (WidgetTester tester) async {
     Widget testWidget = new MediaQuery(
         data: new MediaQueryData(),
-        child: new MaterialApp(home: new Info()));
+        child: new MaterialApp(home: new InfoPage()));
     await tester.pumpWidget(testWidget);
     await tester.pumpWidget(testWidget);
     expect((tester.widget(find.byType(DisabledButton).at(0)) as DisabledButton).isDisabled, true);
@@ -51,7 +51,7 @@ void main() {
   testWidgets('App Render - 3', (WidgetTester tester) async {
     Widget testWidget = new MediaQuery(
         data: new MediaQueryData(),
-        child: new MaterialApp(home: new Home()));
+        child: new MaterialApp(home: new OnBoardingPage()));
 
     await tester.pumpWidget(testWidget);
     expect((tester.widget(find.byType(IntroductionScreen).at(0)) as IntroductionScreen).globalBackgroundColor, Colors.white);
