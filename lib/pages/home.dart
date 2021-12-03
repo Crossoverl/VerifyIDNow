@@ -5,22 +5,6 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 import 'appointment_info.dart';
 
-// class Home extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     SystemChrome.setSystemUIOverlayStyle(
-//       SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
-//     );
-//
-//     return MaterialApp(
-//       title: 'Introduction screen',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(primarySwatch: Colors.blue),
-//       home: OnBoardingPage(),
-//     );
-//   }
-// }
-
 class OnBoardingPage extends StatefulWidget {
 
   @override
@@ -143,12 +127,3 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 }
 
-// class HomePage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Home')),
-//       body: const Center(child: Text("This is the screen after Introduction")),
-//     );
-//   }
-// }

@@ -12,21 +12,6 @@ Future main() async {
   runApp(InfoPage());
 }
 
-// class Info extends StatelessWidget {
-//   const Info({Key? key}) : super(key: key);
-//   static final String title = 'Information';
-//
-//   @override
-//   Widget build(BuildContext context) => MaterialApp(
-//         debugShowCheckedModeBanner: false,
-//         title: title,
-//         theme: ThemeData(
-//           primaryColor: Colors.black,
-//         ),
-//         home: InfoPage(title: title),
-//       );
-// }
-
 class InfoPage extends StatefulWidget {
   final String title = 'Information';
 
