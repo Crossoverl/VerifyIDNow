@@ -46,12 +46,12 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           title: Text(widget.title),
           backgroundColor: Colors.lightBlue,
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back_ios, color: Colors.grey),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop(context);
-            },
-          ),
+          // leading: new IconButton(
+          //   icon: new Icon(Icons.arrow_back_ios, color: Colors.grey),
+          //   onPressed: () {
+          //     Navigator.of(context, rootNavigator: true).pop(context);
+          //   },
+          // ),
         ),
         body: TextfieldGeneralWidget(),
       );
